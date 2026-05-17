@@ -28,7 +28,7 @@ const IntegrationBookTable = ({ data }: Props) => {
                   Total In
                 </h3>
                 <p className="text-3xl font-bold tracking-tight text-green-600">
-                  ₹{totals?.paid}
+                  ₹{totals?.credit}
                 </p>
               </div>
             </Card>
@@ -38,7 +38,7 @@ const IntegrationBookTable = ({ data }: Props) => {
                   Total Out
                 </h3>
                 <p className="text-3xl font-bold tracking-tight text-red-600">
-                  ₹{totals?.credit}
+                  ₹{totals?.paid}
                 </p>
               </div>
             </Card>

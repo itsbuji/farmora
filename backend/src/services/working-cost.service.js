@@ -53,6 +53,7 @@ const getAll = async (filter, currentUser) => {
     (record) => record.payment_type === 'expense'
   )
 
+
   const item = await itemService.getWorkingItem(currentUser)
   if (item) {
     filter.category_id = item.id

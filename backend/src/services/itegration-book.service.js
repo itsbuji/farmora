@@ -73,9 +73,9 @@ const getAll = async (filter, currentUser) => {
       },
     ],
   })
+
   const paid = rawPaid.map((paid) => {
     const transformed = paid.toJSON()
-
     return {
       id: transformed.id,
       net_amount: transformed.amount,
@@ -100,7 +100,7 @@ const getAll = async (filter, currentUser) => {
     totals: {
       paid: totalPaid,
       credit: totalCredit,
-      balance: totalPaid - totalCredit,
+      balance:   totalCredit - totalPaid,
     },
   }
 }
