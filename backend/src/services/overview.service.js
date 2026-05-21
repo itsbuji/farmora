@@ -10,6 +10,7 @@ import batchService from '@services/batch.service'
 import seasonService from '@services/season.service'
 import { Op } from 'sequelize'
 import VendorModel from '@models/vendor'
+import BatchModel from '@models/batch'
 
 const isFeedType = (type) => {
 	return type === 'BF' || type === 'BS' || type === 'PBS'
@@ -96,9 +97,16 @@ const getBatchOverview = async (filter, currentUser) => {
 				required: false,
 				attributes: ['id', 'name'],
 			},
+			{
+				model: BatchModel,
+				as: 'batch',
+				required: false,
+				attributes: ['id', 'name'],
+			}
 		],
 		order: [['date', 'ASC']],
 	})
+
 
 	const totalPurchasedFeeds =
 		calculateTotalFeeds(purchases) + calculateTotalFeeds(reassigned)

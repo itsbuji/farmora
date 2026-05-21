@@ -16,6 +16,7 @@ type Props = {
 
 const ReturnItem = (props: Props) => {
   const { returns, totalReturnAmount, totalReturnFeeds } = props;
+  console.log(returns)
   return (
     <>
       <h3 className="text-lg font-semibold mb-3">Returned Items</h3>
@@ -26,7 +27,8 @@ const ReturnItem = (props: Props) => {
           ))}
         </TableRow>
         {returns.map((item, index) => {
-          const purpose = `${item.category.type} return to ${item.vendor?.name}`;
+	  const returnTo = item.return_type  === "vendor"? item.vendor?.name : item.batch?.name 
+          const purpose = `${item.category.type} return to ${returnTo}`;
           return (
             <TableRow key={index}>
               <TableCell content={dayjs(item.date).format("DD-MM-YYYY")} />
