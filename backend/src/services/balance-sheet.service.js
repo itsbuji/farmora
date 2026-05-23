@@ -628,35 +628,41 @@ const getBalanceSheet = async (filter, currentUser) => {
   )
   const transactions = calculateRunningBalance(filteredTransactions, 0)
 
+  let inAmount = 0
+  let outAmount = 0
   const formattedTransactions = transactions
-    .map((t) => ({
-      date: formatTransactionDate(t.date),
-      purpose: t.purpose,
-      type: t.type,
-      amount: parseFloat(t.amount.toFixed(2)),
-      balance: parseFloat(t.balance.toFixed(2)),
-    }))
+    .map((t) => {
+    const parsedAmount = parseFloat(t.amount.toFixed(2))
+    if(t.type === 'in') {
+      inAmount += parsedAmount
+    } else {
+      outAmount += parsedAmount
+    }
+      return {
+	  date: formatTransactionDate(t.date),
+	  purpose: t.purpose,
+	  type: t.type,
+	  amount: parseFloat(t.amount.toFixed(2)),
+	  balance: parseFloat(t.balance.toFixed(2)),
+      }
+  })
 
-  logger.info(
-    {
-      actor_id: currentUser.id,
-      opening_balance: openingBalance,
-      total_in: totalIn,
-      total_out: totalOut,
-      liability,
-      receivable,
-      transaction_count: formattedTransactions.length,
-    },
-    'Balance sheet fetched'
-  )
 
+  let inA = 0, outA = 0
+for (let t of transactions) {
+    if(t.type === 'in') {
+      inA += t.amount
+    } else {
+      outA += t.amount
+    }
+  }
   return {
     opening_balance: parseFloat(openingBalance.toFixed(2)),
     from_date: from_date || null,
     to_date: to_date || null,
     summary: {
-      total_in: parseFloat(totalIn.toFixed(2)),
-      total_out: parseFloat(totalOut.toFixed(2)),
+      total_in: parseFloat(inA.toFixed(2)),
+      total_out: parseFloat(outA.toFixed(2)),
       liability: parseFloat(liability.toFixed(2)),
       receivable: parseFloat(receivable.toFixed(2)),
       net: parseFloat(net.toFixed(2)),

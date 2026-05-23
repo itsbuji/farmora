@@ -261,9 +261,19 @@ const BreakdownTable = ({ data }: { data: BalanceSheetResponse }) => {
   );
 };
 
+const getBalance = (inA: number, outA:number)  => {
+  const t = inA - outA 
+  return t.toFixed(2)
+}
+
 const AllTables = ({ data }: { data: BalanceSheetResponse }) => {
   const { transactions, summary } = data;
 
+  const {total_in, total_out} = summary ;
+
+  const balance = getBalance(total_in, total_out)
+  
+  console.log(balance)
   return (
     <div>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3 mb-4">
@@ -274,7 +284,7 @@ const AllTables = ({ data }: { data: BalanceSheetResponse }) => {
             </h3>
 
             <p className="text-3xl font-bold tracking-tight text-green-600">
-              ₹{summary.total_in}
+              {formatCurrency(summary.total_in)}
             </p>
           </div>
         </Card>
@@ -286,7 +296,7 @@ const AllTables = ({ data }: { data: BalanceSheetResponse }) => {
             </h3>
 
             <p className="text-3xl font-bold tracking-tight text-red-600">
-              ₹{summary.total_out}
+              {formatCurrency(summary.total_out)}
             </p>
           </div>
         </Card>
@@ -298,12 +308,12 @@ const AllTables = ({ data }: { data: BalanceSheetResponse }) => {
 
             <p
               className={`text-3xl font-bold tracking-tight ${
-                summary.total_in - summary.total_out < 0
+                balance< 0
                   ? "text-red-600"
                   : "text-green-600"
               }`}
             >
-              ₹{summary.total_in - summary.total_out}
+              {formatCurrency(balance)}
             </p>
           </div>
         </Card>
