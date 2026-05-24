@@ -160,10 +160,10 @@ const returnedRecords = await PurchaseReturnModel.findAll({
 
   let balance = parseFloat(vendor.opening_balance || '0')
   const purchasesWithBalance = sorted.map((item) => {
-    if(item.type === "paid") {
-      balance = parseFloat(balance) - parseFloat(item.amount)
+    if(item.type === "credit" ) {
+      balance = parseFloat(balance) + parseFloat(item.amount) 
     } else {
-    balance = parseFloat(balance)+ parseFloat(item.amount) 
+      balance = parseFloat(balance) - parseFloat(item.amount)
     }
     const newObj = {
       ...item,
