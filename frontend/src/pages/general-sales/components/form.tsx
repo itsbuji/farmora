@@ -6,6 +6,8 @@ import SelectList from "@components/select-list";
 import useGetSeasonNames from "@hooks/use-get-season-names";
 import { TextField, Button } from "@mui/material";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 type EditMethod = UseFormReturn<EditGeneralSalesRequest, any, FieldValues>;
 type AddMethod = UseFormReturn<NewGeneralSalesRequest, any, FieldValues>;
@@ -24,6 +26,7 @@ const GeneralSalesForm = ({ methods, onSubmit }: Props) => {
     handleSubmit,
     register,
     formState: { errors },
+    clearErrors
   } = methods;
 
   const values = watch();
@@ -61,6 +64,24 @@ const GeneralSalesForm = ({ methods, onSubmit }: Props) => {
             error={Boolean(errors.amount)}
             helperText={errors.amount?.message}
             size="small"
+          />
+
+          <DatePicker
+            label="Date"
+            value={values.date ? dayjs(values.date) : null}
+            format="DD-MM-YYYY"
+            onChange={(v) => {
+              setValue("date", v ? dayjs(v).toISOString() : "");
+              clearErrors("date");
+            }}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                size: "small",
+                error: Boolean(errors.date),
+                helperText: errors.date?.message,
+              },
+            }}
           />
 
           <TextField

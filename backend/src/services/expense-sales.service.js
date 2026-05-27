@@ -5,7 +5,6 @@ import dayjs from 'dayjs'
 import { Op } from 'sequelize'
 
 const create = async (payload, currentUser) => {
-  payload.date = dayjs()
 
   if (currentUser.user_type === userRoles.staff.type) {
     payload.master_id = currentUser.master_id

@@ -49,7 +49,7 @@ const pageComponents: Record<string, React.ComponentType> = {
   "/expense/purchase-book": PurchaseBookPage,
   "/expense/integration-book": IntegrationBookPage,
   "/expense/returns": ItemReturnsPage,
-  "/expense/working-coast": WorkingCostPage,
+  "/expense/working-cost": WorkingCostPage,
   "/sales/sale": SalePage,
   "/sales/sales-book": SalesBookPage,
   "/general/general-expense": GeneralExpensePage,
