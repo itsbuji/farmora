@@ -16,7 +16,7 @@ type Props = {
 
 const ReturnItem = (props: Props) => {
   const { returns, totalReturnAmount, totalReturnFeeds } = props;
-  console.log(returns)
+  console.log(returns);
   return (
     <>
       <h3 className="text-lg font-semibold mb-3">Returned Items</h3>
@@ -27,7 +27,10 @@ const ReturnItem = (props: Props) => {
           ))}
         </TableRow>
         {returns.map((item, index) => {
-	  const returnTo = item.return_type  === "vendor"? item.vendor?.name : item.to_batch_data?.name 
+          const returnTo =
+            item.return_type === "vendor"
+              ? item.vendor?.name
+              : item.to_batch_data?.name;
           const purpose = `${item.category.type} return to ${returnTo}`;
           return (
             <TableRow key={index}>

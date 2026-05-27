@@ -135,169 +135,209 @@ const PurchaseForm = ({ onSubmit, defaultValues, apiError }: Props) => {
   return (
     <>
       <form {...methods} onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <SelectList
-            options={seasonNames.data}
-            value={values.season_id}
-            onChange={(val) => {
-              clearErrors("season_id");
-              setValue("season_id", val);
-            }}
-            label="Season"
-            name="season_id"
-            error={Boolean(errors.season_id)}
-            helperText={errors.season_id?.message}
-          />
-          <DatePicker
-            label="Invoice Date"
-            name="invoice_date"
-            value={values.invoice_date ? dayjs(values.invoice_date) : null}
-            format="DD-MM-YYYY"
-            onChange={(v) => {
-              clearErrors("invoice_number");
-              setValue("invoice_date", dayjs(v).toISOString());
-            }}
-            slotProps={{
-              textField: {
-                fullWidth: true,
-                error: Boolean(errors.invoice_date),
-                helperText: errors.invoice_date?.message,
-                size: "small",
-              },
-            }}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 w-full">
+          <div className="min-w-0">
+            <SelectList
+              options={seasonNames.data}
+              value={values.season_id}
+              onChange={(val) => {
+                clearErrors("season_id");
+                setValue("season_id", val);
+              }}
+              label="Season"
+              name="season_id"
+              error={Boolean(errors.season_id)}
+              helperText={errors.season_id?.message}
+            />
+          </div>
 
-          <RHFTextField
-            label="Invoice Number"
-            control={control}
-            name="invoice_number"
-            disabled
-            fullWidth
-            size="small"
-          />
+          <div className="min-w-0">
+            <DatePicker
+              label="Invoice Date"
+              name="invoice_date"
+              value={values.invoice_date ? dayjs(values.invoice_date) : null}
+              format="DD-MM-YYYY"
+              onChange={(v) => {
+                clearErrors("invoice_date");
+                setValue("invoice_date", dayjs(v).toISOString());
+              }}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: Boolean(errors.invoice_date),
+                  helperText: errors.invoice_date?.message,
+                  size: "small",
+                },
+              }}
+            />
+          </div>
 
-          <SelectList
-            options={sellerList.data}
-            value={values.vendor_id}
-            onChange={(val) => {
-              clearErrors("vendor_id");
-              setValue("vendor_id", val);
-            }}
-            label="Supplier"
-            name="vendor_id"
-            error={Boolean(errors.vendor_id)}
-            helperText={errors.vendor_id?.message}
-          />
-          <SelectList
-            options={itemList}
-            value={values.category_id}
-            disabled={itemList.length === 0}
-            onChange={(val) => {
-              clearErrors("category_id");
-              setValue("category_id", val);
-            }}
-            label="Type"
-            name="category_id"
-            error={Boolean(errors.category_id)}
-            helperText={errors.category_id?.message}
-          />
+          <div className="min-w-0">
+            <RHFTextField
+              label="Invoice Number"
+              control={control}
+              name="invoice_number"
+              disabled
+              fullWidth
+              size="small"
+            />
+          </div>
 
-          <SelectList
-            options={batchList}
-            disabled={batchList.length === 0}
-            value={values.batch_id}
-            onChange={(val) => {
-              clearErrors("batch_id");
-              setValue("batch_id", val);
-            }}
-            label="Batch"
-            name="batch_id"
-            error={Boolean(errors.batch_id)}
-            helperText={errors.batch_id?.message}
-          />
+          <div className="min-w-0">
+            <SelectList
+              options={sellerList.data}
+              value={values.vendor_id}
+              onChange={(val) => {
+                clearErrors("vendor_id");
+                setValue("vendor_id", val);
+              }}
+              label="Supplier"
+              name="vendor_id"
+              error={Boolean(errors.vendor_id)}
+              helperText={errors.vendor_id?.message}
+            />
+          </div>
 
-          <RHFTextField
-            label="Quantity (Nos)"
-            name={"quantity"}
-            control={control}
-            type="number"
-            fullWidth
-            disabled={
-              selectedType === "working" || selectedType === "integration"
-            }
-            size="small"
-          />
+          <div className="min-w-0">
+            <SelectList
+              options={itemList}
+              value={values.category_id}
+              disabled={itemList.length === 0}
+              onChange={(val) => {
+                clearErrors("category_id");
+                setValue("category_id", val);
+              }}
+              label="Type"
+              name="category_id"
+              error={Boolean(errors.category_id)}
+              helperText={errors.category_id?.message}
+            />
+          </div>
 
-          <RHFTextField
-            label="Rate / Number"
-            name="price_per_unit"
-            control={control}
-            type="number"
-            fullWidth
-            size="small"
-            onChange={(e) => {
-              const { value } = e.target;
-              setValue("price_per_unit", value);
-              const totalPrice = parsedQty * parseFloat(value);
-              setValue("total_price", totalPrice.toString());
-            }}
-          />
-          <RHFTextField
-            label="Total Amount"
-            name="total_price"
-            control={control}
-            type="number"
-            fullWidth
-            size="small"
-            onChange={(e) => {
-              const { value } = e.target;
-              setValue("total_price", value);
-              const pricePerUnit = parseFloat(value) / parsedQty;
-              setValue("price_per_unit", pricePerUnit.toString());
-            }}
-          />
-          <RHFTextField
-            label="Discount / Round Off"
-            name="discount_price"
-            control={control}
-            type="number"
-            fullWidth
-            size="small"
-          />
-          <RHFTextField
-            label="Net amount"
-            name="net_amount"
-            control={control}
-            fullWidth
-            disabled
-            size="small"
-          />
-          <RHFTextField
-            label="Assign Quantity"
-            name="assign_quantity"
-            control={control}
-            fullWidth
-            size="small"
-          />
-          <TextField
-            select
-            label="Payment Type"
-            {...register("payment_type")}
-            value={values.payment_type || "credit"}
-            fullWidth
-            disabled={
-              selectedType === "working" || selectedType === "integration"
-            }
-            error={Boolean(errors.payment_type)}
-            helperText={errors.payment_type?.message}
-            size="small"
-          >
-            <MenuItem value="credit">Credit</MenuItem>
-            <MenuItem value="paid">Paid</MenuItem>
-          </TextField>
+          <div className="min-w-0">
+            <SelectList
+              options={batchList}
+              disabled={batchList.length === 0}
+              value={values.batch_id}
+              onChange={(val) => {
+                clearErrors("batch_id");
+                setValue("batch_id", val);
+              }}
+              label="Batch"
+              name="batch_id"
+              error={Boolean(errors.batch_id)}
+              helperText={errors.batch_id?.message}
+            />
+          </div>
+
+          <div className="min-w-0">
+            <RHFTextField
+              label="Quantity (Nos)"
+              name="quantity"
+              control={control}
+              type="number"
+              fullWidth
+              disabled={
+                selectedType === "working" || selectedType === "integration"
+              }
+              size="small"
+            />
+          </div>
+
+          <div className="min-w-0">
+            <RHFTextField
+              label="Rate / Number"
+              name="price_per_unit"
+              control={control}
+              type="number"
+              fullWidth
+              size="small"
+              onChange={(e) => {
+                const { value } = e.target;
+                setValue("price_per_unit", value);
+                const totalPrice = parsedQty * parseFloat(value || 0);
+                setValue("total_price", totalPrice.toString());
+              }}
+            />
+          </div>
+
+          <div className="min-w-0">
+            <RHFTextField
+              label="Total Amount"
+              name="total_price"
+              control={control}
+              type="number"
+              fullWidth
+              size="small"
+              onChange={(e) => {
+                const { value } = e.target;
+                setValue("total_price", value);
+                const pricePerUnit = parsedQty
+                  ? parseFloat(value || 0) / parsedQty
+                  : 0;
+                setValue("price_per_unit", pricePerUnit.toString());
+              }}
+            />
+          </div>
+
+          <div className="min-w-0">
+            <RHFTextField
+              label="Discount / Round Off"
+              name="discount_price"
+              control={control}
+              type="number"
+              fullWidth
+              size="small"
+            />
+          </div>
+
+          <div className="min-w-0">
+            <RHFTextField
+              label="Net amount"
+              name="net_amount"
+              control={control}
+              fullWidth
+              disabled
+              size="small"
+            />
+          </div>
+
+          <div className="min-w-0">
+            <RHFTextField
+              label="Assign Quantity"
+              name="assign_quantity"
+              control={control}
+              fullWidth
+              size="small"
+            />
+          </div>
+
+          <div className="min-w-0">
+            <TextField
+              select
+              label="Payment Type"
+              {...register("payment_type")}
+              value={values.payment_type || "credit"}
+              fullWidth
+              disabled={
+                selectedType === "working" || selectedType === "integration"
+              }
+              error={Boolean(errors.payment_type)}
+              helperText={errors.payment_type?.message}
+              size="small"
+            >
+              <MenuItem value="credit">Credit</MenuItem>
+              <MenuItem value="paid">Paid</MenuItem>
+            </TextField>
+          </div>
         </div>
-        <div className="flex justify-end mt-6">
-          <Button variant="contained" type="submit">
+
+        <div className="mt-6 flex justify-stretch md:justify-end">
+          <Button
+            variant="contained"
+            type="submit"
+            className="w-full md:w-auto"
+          >
             Submit
           </Button>
         </div>

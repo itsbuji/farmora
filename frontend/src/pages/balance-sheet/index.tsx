@@ -4,7 +4,8 @@ import BalanceSheetTable from "./components/table";
 import useGetBalanceSheet from "./hooks/use-get-balance-sheet";
 
 const BalanceSheetPage = () => {
-  const { balanceSheetData, isLoading, fetchBalanceSheet } = useGetBalanceSheet();
+  const { balanceSheetData, isLoading, fetchBalanceSheet } =
+    useGetBalanceSheet();
 
   const handleFilter = (filter: { from_date?: string; to_date?: string }) => {
     fetchBalanceSheet(filter);

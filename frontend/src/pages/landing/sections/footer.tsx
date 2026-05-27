@@ -29,7 +29,9 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <button
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   className="hover:text-green-400 transition-colors"
                 >
                   Home

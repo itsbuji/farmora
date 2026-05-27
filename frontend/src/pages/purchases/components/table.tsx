@@ -13,102 +13,98 @@ import type { ListResponse } from "@app-types/response.types";
 import type { Purchase, PurchaseFilterRequest } from "../types";
 
 const headers = [
-	"Supplier Name",
-	"Type",
-	"Quantity",
-	"Price",
-	"Total Amount",
-	"Invoice Number",
-	"Invoice Date",
-	"Action",
+  "Supplier Name",
+  "Type",
+  "Quantity",
+  "Price",
+  "Total Amount",
+  "Invoice Number",
+  "Invoice Date",
+  "Action",
 ];
 
 type Props = {
-	onEdit: (selectedId: number) => void;
-	data: ListResponse<Purchase>;
-	handleFetchAllPurchases: (filter: PurchaseFilterRequest) => Promise<void>;
-	filterButtonRef: Ref<HTMLButtonElement>;
+  onEdit: (selectedId: number) => void;
+  data: ListResponse<Purchase>;
+  handleFetchAllPurchases: (filter: PurchaseFilterRequest) => Promise<void>;
+  filterButtonRef: Ref<HTMLButtonElement>;
 };
 
 const ItemTable = ({
-	onEdit,
-	data,
-	handleFetchAllPurchases,
-	filterButtonRef,
+  onEdit,
+  data,
+  handleFetchAllPurchases,
+  filterButtonRef,
 }: Props) => {
-	const isEmpty = useMemo(() => {
-		return data.data.length === 0;
-	}, [data.data]);
+  const isEmpty = useMemo(() => {
+    return data.data.length === 0;
+  }, [data.data]);
 
-	return (
-		<>
-			<div className="mb-5">
-				<FilterItems
-					filterButtonRef={filterButtonRef}
-					onFilter={async (filter) => {
-						await handleFetchAllPurchases(filter);
-					}}
-				/>
-			</div>
+  return (
+    <>
+      <div className="mb-5">
+        <FilterItems
+          filterButtonRef={filterButtonRef}
+          onFilter={async (filter) => {
+            await handleFetchAllPurchases(filter);
+          }}
+        />
+      </div>
 
-			<>
-				<Card>
-					<Table>
-						<TableRow>
-							{headers.map((header) => (
-								<TableHeaderCell key={header} content={header} />
-							))}
-						</TableRow>
-						{data.data.map((item) => {
+      <>
+        <Card>
+          <Table>
+            <TableRow>
+              {headers.map((header) => (
+                <TableHeaderCell key={header} content={header} />
+              ))}
+            </TableRow>
+            {data.data.map((item) => {
+              console.log(item);
+              return (
+                <TableRow key={item.id}>
+                  <TableCell content={item.vendor?.name} />
+                  <TableCell
+                    content={
+                      <span className="capitalize">{item.category.type}</span>
+                    }
+                  />
 
-							console.log(item)
-							return (
-								(
-									<TableRow key={item.id}>
-										<TableCell content={item.vendor?.name} />
-										<TableCell
-											content={
-												<span className="capitalize">{item.category.type}</span>
-											}
-										/>
+                  <TableCell content={item.quantity || "-"} />
+                  <TableCell content={item.price_per_unit || "-"} />
+                  <TableCell content={item.total_price} />
+                  <TableCell content={item.invoice_number} />
+                  <TableCell
+                    content={dayjs(item.invoice_date).format("DD-MM-YYYY")}
+                  />
+                  <TableCell
+                    content={
+                      <EditIcon
+                        className="w-6 h-6 text-gray-600 hover:text-gray-800 cursor-pointer"
+                        onClick={() => {
+                          onEdit(item.id);
+                        }}
+                      />
+                    }
+                  />
+                </TableRow>
+              );
+            })}
+          </Table>
 
-										<TableCell content={item.quantity || "-"} />
-										<TableCell content={item.price_per_unit || "-"} />
-										<TableCell content={item.total_price} />
-										<TableCell content={item.invoice_number} />
-										<TableCell
-											content={dayjs(item.invoice_date).format("DD-MM-YYYY")}
-										/>
-										<TableCell
-											content={
-												<EditIcon
-													className="w-6 h-6 text-gray-600 hover:text-gray-800 cursor-pointer"
-													onClick={() => {
-														onEdit(item.id);
-													}}
-												/>
-											}
-										/>
-									</TableRow>
-								)
-							)
-						})}
-
-					</Table>
-
-					<Ternary
-						when={isEmpty}
-						then={
-							<DataNotFound
-								title="No purchases found"
-								description="Try adjusting your filters or create a new purchase"
-							/>
-						}
-					/>
-				</Card>
-			</>
-		</>
-	);
+          <Ternary
+            when={isEmpty}
+            then={
+              <DataNotFound
+                title="No purchases found"
+                description="Try adjusting your filters or create a new purchase"
+              />
+            }
+          />
+        </Card>
+      </>
+    </>
+  );
 };
 
 export default ItemTable;

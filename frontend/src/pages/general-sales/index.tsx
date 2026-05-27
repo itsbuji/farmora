@@ -22,7 +22,10 @@ const GeneralSalesPage = () => {
       </div>
       <GeneralSalesTable onEdit={(id) => setSelectedId(id)} />
       <AddGeneralSales isShow={isOpen} onClose={onClose} />
-      <EditGeneralSales selectedId={selectedId} onClose={() => setSelectedId(null)} />
+      <EditGeneralSales
+        selectedId={selectedId}
+        onClose={() => setSelectedId(null)}
+      />
     </>
   );
 };

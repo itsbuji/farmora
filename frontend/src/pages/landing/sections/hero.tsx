@@ -81,11 +81,7 @@ const HeroSection = ({
             >
               View Packages
             </Button>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={onScrollToAbout}
-            >
+            <Button variant="contained" size="large" onClick={onScrollToAbout}>
               Learn More
             </Button>
           </div>

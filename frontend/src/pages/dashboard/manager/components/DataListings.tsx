@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
-import type { Farm, Batch, Season, Sale, Purchase, Transaction } from "../types";
+import type {
+  Farm,
+  Batch,
+  Season,
+  Sale,
+  Purchase,
+  Transaction,
+} from "../types";
 import dayjs from "dayjs";
 
 const TableHeader = ({ children }: { children: ReactNode }) => (
@@ -49,7 +56,9 @@ export const FarmsListing = ({ data }: { data: Farm[] }) => (
               key={farm.id}
               className="hover:bg-slate-50/50 transition-colors"
             >
-              <td className="px-6 py-4 font-bold text-slate-800">{farm.name}</td>
+              <td className="px-6 py-4 font-bold text-slate-800">
+                {farm.name}
+              </td>
               <td className="px-6 py-4 text-slate-500">{farm.place || "-"}</td>
               <td className="px-6 py-4 text-slate-600 font-medium">
                 {farm.capacity || "-"}
@@ -101,7 +110,9 @@ export const BatchesListing = ({ data }: { data: Batch[] }) => (
               </td>
               <td
                 className={`px-6 py-4 font-bold text-xs ${
-                  (batch.profit || 0) >= 0 ? "text-emerald-600" : "text-rose-600"
+                  (batch.profit || 0) >= 0
+                    ? "text-emerald-600"
+                    : "text-rose-600"
                 }`}
               >
                 ₹{(batch.profit || 0).toLocaleString()}
@@ -149,7 +160,9 @@ export const SeasonsListing = ({ data }: { data: Season[] }) => (
               </td>
               <td className="px-6 py-4 text-slate-500 text-xs">
                 {dayjs(season.from_date).format("MMM YYYY")} -{" "}
-                {season.to_date ? dayjs(season.to_date).format("MMM YYYY") : "Present"}
+                {season.to_date
+                  ? dayjs(season.to_date).format("MMM YYYY")
+                  : "Present"}
               </td>
               <td className="px-6 py-4">
                 <div className="flex items-center gap-2">
@@ -159,7 +172,9 @@ export const SeasonsListing = ({ data }: { data: Season[] }) => (
                       style={{ width: `${season.margin || 0}%` }}
                     ></div>
                   </div>
-                  <span className="font-bold text-xs">{season.margin || 0}%</span>
+                  <span className="font-bold text-xs">
+                    {season.margin || 0}%
+                  </span>
                 </div>
               </td>
             </tr>
@@ -339,7 +354,9 @@ export const TransactionsListing = ({ data }: { data: Transaction[] }) => (
       </table>
     </div>
     {data.length === 0 && (
-      <div className="p-8 text-center text-slate-400">No transactions found</div>
+      <div className="p-8 text-center text-slate-400">
+        No transactions found
+      </div>
     )}
   </div>
 );

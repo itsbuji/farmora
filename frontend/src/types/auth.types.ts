@@ -26,7 +26,7 @@ export type AuthDispatchContextData = ActionDispatch<[action: AuthActions]>;
 
 export type AuthActions = {
   type: "LOGIN" | "LOGOUT";
-  payload: { 
+  payload: {
     token: string | null;
     user?: {
       name: string;

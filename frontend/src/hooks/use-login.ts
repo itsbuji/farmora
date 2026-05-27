@@ -27,8 +27,8 @@ const useLogin = () => {
       };
       createSession(userSession);
       toast.success("Login successful!");
-      dispatch({ 
-        type: "LOGIN", 
+      dispatch({
+        type: "LOGIN",
         payload: {
           token: data.token,
           user: {

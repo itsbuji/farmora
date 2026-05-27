@@ -24,7 +24,12 @@ const ManagerRegistrationDialog = ({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<ManagerRegistrationPayload>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ManagerRegistrationPayload>({
     defaultValues: {
       name: "",
       username: "",
@@ -70,12 +75,17 @@ const ManagerRegistrationDialog = ({
   };
 
   return (
-    <Dialog isOpen={isOpen} headerTitle="Register for Farm Management" onClose={handleClose}>
+    <Dialog
+      isOpen={isOpen}
+      headerTitle="Register for Farm Management"
+      onClose={handleClose}
+    >
       <DialogContent>
         <div className="mb-4">
           <p className="text-gray-700 mb-2">
             Complete the registration to get started with the{" "}
-            <span className="font-semibold text-green-600">{packageName}</span> package.
+            <span className="font-semibold text-green-600">{packageName}</span>{" "}
+            package.
           </p>
         </div>
 
@@ -109,9 +119,7 @@ const ManagerRegistrationDialog = ({
               {...register("name", { required: "Full name is required" })}
             />
             {errors.name && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.name.message}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
             )}
           </div>
 

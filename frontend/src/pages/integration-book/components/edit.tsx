@@ -28,7 +28,11 @@ const EditIntegrationBook = ({ selectedId, onClose, refetch }: Props) => {
   };
 
   return (
-    <Dialog isOpen={isShow} headerTitle="Edit Integration Book" onClose={handleClose}>
+    <Dialog
+      isOpen={isShow}
+      headerTitle="Edit Integration Book"
+      onClose={handleClose}
+    >
       <DialogContent>
         <IntegrationBookForm
           onSubmit={onSubmit}

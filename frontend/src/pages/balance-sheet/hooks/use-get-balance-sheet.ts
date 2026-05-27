@@ -1,12 +1,10 @@
 import { useState } from "react";
-import type {
-  BalanceSheetFilterRequest,
-  BalanceSheetResponse,
-} from "../types";
+import type { BalanceSheetFilterRequest, BalanceSheetResponse } from "../types";
 import balanceSheet from "../api";
 
 const useGetBalanceSheet = () => {
-  const [balanceSheetData, setBalanceSheetData] = useState<BalanceSheetResponse | null>(null);
+  const [balanceSheetData, setBalanceSheetData] =
+    useState<BalanceSheetResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,7 +12,11 @@ const useGetBalanceSheet = () => {
     setIsLoading(true);
     setError(null);
 
-    const { status, data, error: fetchError } = await balanceSheet.fetchBalanceSheet(filter);
+    const {
+      status,
+      data,
+      error: fetchError,
+    } = await balanceSheet.fetchBalanceSheet(filter);
 
     if (status === "success" && data) {
       setBalanceSheetData(data);

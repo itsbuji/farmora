@@ -9,7 +9,7 @@ const authReducer = (
 ): AuthContextData => {
   switch (action.type) {
     case "LOGIN":
-      return { 
+      return {
         token: action.payload.token,
         user: action.payload.user || null,
       };
@@ -31,11 +31,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const userSession = getSession();
     return {
       token: userSession.token || null,
-      user: userSession.token ? {
-        name: userSession.name,
-        username: userSession.username,
-        role: userSession.role || null,
-      } : null,
+      user: userSession.token
+        ? {
+            name: userSession.name,
+            username: userSession.username,
+            role: userSession.role || null,
+          }
+        : null,
     };
   });
 

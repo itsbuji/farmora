@@ -32,7 +32,11 @@ const AddSalesBookEntry = ({ isShow, onClose }: Props) => {
   });
 
   return (
-    <Dialog isOpen={isShow} headerTitle="Add Sales Book Entry" onClose={handleClose}>
+    <Dialog
+      isOpen={isShow}
+      headerTitle="Add Sales Book Entry"
+      onClose={handleClose}
+    >
       <DialogContent>
         <SalesBookForm methods={methods} onSubmit={onSubmit} />
       </DialogContent>

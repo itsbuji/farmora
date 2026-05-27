@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
-
 @layer components {
-	.input {
-		@apply w-full border rounded p-2
-	}
+  .input {
+    @apply w-full border rounded p-2;
+  }
 }

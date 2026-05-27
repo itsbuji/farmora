@@ -12,25 +12,24 @@ const Dialog = ({ headerTitle, children, isOpen, onClose }: Props) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+      className="fixed inset-0 z-[9999] bg-black/50 overflow-y-auto"
       onClick={onClose}
     >
-      {/* Dialog */}
-      <div
-        className="bg-white rounded-lg shadow-lg w-full max-w-md"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="border-b border-gray-200 px-6 py-4">
-          <h2 className="text-lg font-semibold text-gray-900">{headerTitle}</h2>
-        </div>
+      <div className="min-h-screen flex items-start justify-center p-4">
+        <div
+          className="bg-white rounded-lg shadow-lg w-full max-w-md max-h-[90vh] flex flex-col"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="border-b border-gray-200 px-6 py-4 shrink-0">
+            <h2 className="text-lg font-semibold text-gray-900">
+              {headerTitle}
+            </h2>
+          </div>
 
-        {/* Content and Actions */}
-        {children}
+          {children}
+        </div>
       </div>
     </div>
   );
 };
-
 export default Dialog;

@@ -23,7 +23,10 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
       <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-800 text-xs">
         <p className="font-bold mb-1">{label}</p>
         <p className="text-green-400">
-          Value: <span className="text-white">₹{Number(payload[0].value).toLocaleString()}</span>
+          Value:{" "}
+          <span className="text-white">
+            ₹{Number(payload[0].value).toLocaleString()}
+          </span>
         </p>
       </div>
     );
@@ -48,7 +51,11 @@ export const BatchChart = ({
             <stop offset="95%" stopColor="#16a34a" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+        <CartesianGrid
+          strokeDasharray="3 3"
+          vertical={false}
+          stroke="#f1f5f9"
+        />
         <XAxis
           dataKey="name"
           tick={{ fontSize: 10, fill: "#94a3b8" }}
@@ -86,7 +93,11 @@ export const SeasonChart = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+        <CartesianGrid
+          strokeDasharray="3 3"
+          vertical={false}
+          stroke="#f1f5f9"
+        />
         <XAxis
           dataKey="name"
           tick={{ fontSize: 10, fill: "#94a3b8" }}
@@ -108,8 +119,18 @@ export const SeasonChart = ({
           }}
         />
         <Legend verticalAlign="top" height={36} iconType="circle" />
-        <Bar dataKey="revenue" fill="#16a34a" radius={[4, 4, 0, 0]} barSize={24} />
-        <Bar dataKey="expense" fill="#f43f5e" radius={[4, 4, 0, 0]} barSize={24} />
+        <Bar
+          dataKey="revenue"
+          fill="#16a34a"
+          radius={[4, 4, 0, 0]}
+          barSize={24}
+        />
+        <Bar
+          dataKey="expense"
+          fill="#f43f5e"
+          radius={[4, 4, 0, 0]}
+          barSize={24}
+        />
       </BarChart>
     </ResponsiveContainer>
   );

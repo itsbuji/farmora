@@ -1,6 +1,15 @@
-import { Card, CardContent, Typography } from '@mui/material';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useTheme } from '@mui/material/styles';
+import { Card, CardContent, Typography } from "@mui/material";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { useTheme } from "@mui/material/styles";
 
 interface SalesChartProps {
   data: Array<{
@@ -22,7 +31,10 @@ export const SalesChart = ({ data }: SalesChartProps) => {
         </Typography>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={theme.palette.divider}
+            />
             <XAxis dataKey="name" stroke={theme.palette.text.secondary} />
             <YAxis stroke={theme.palette.text.secondary} />
             <Tooltip
@@ -33,9 +45,21 @@ export const SalesChart = ({ data }: SalesChartProps) => {
               }}
             />
             <Legend />
-            <Bar dataKey="sales" fill={theme.palette.primary.main} radius={[8, 8, 0, 0]} />
-            <Bar dataKey="expenses" fill={theme.palette.error.main} radius={[8, 8, 0, 0]} />
-            <Bar dataKey="profit" fill={theme.palette.success.main} radius={[8, 8, 0, 0]} />
+            <Bar
+              dataKey="sales"
+              fill={theme.palette.primary.main}
+              radius={[8, 8, 0, 0]}
+            />
+            <Bar
+              dataKey="expenses"
+              fill={theme.palette.error.main}
+              radius={[8, 8, 0, 0]}
+            />
+            <Bar
+              dataKey="profit"
+              fill={theme.palette.success.main}
+              radius={[8, 8, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

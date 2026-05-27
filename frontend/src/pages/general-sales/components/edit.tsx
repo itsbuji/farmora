@@ -42,7 +42,11 @@ const EditGeneralSales = ({ selectedId, onClose }: Props) => {
   });
 
   return (
-    <Dialog isOpen={isShow} headerTitle="Edit General Sales" onClose={handleClose}>
+    <Dialog
+      isOpen={isShow}
+      headerTitle="Edit General Sales"
+      onClose={handleClose}
+    >
       <DialogContent>
         <GeneralSalesForm methods={methods} onSubmit={onSubmit} />
       </DialogContent>

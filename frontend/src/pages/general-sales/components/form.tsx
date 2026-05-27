@@ -26,7 +26,7 @@ const GeneralSalesForm = ({ methods, onSubmit }: Props) => {
     handleSubmit,
     register,
     formState: { errors },
-    clearErrors
+    clearErrors,
   } = methods;
 
   const values = watch();

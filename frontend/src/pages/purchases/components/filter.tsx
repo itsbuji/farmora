@@ -34,7 +34,6 @@ const FilterItems = (props: Props) => {
   const itemCategoryName = useGetItemCategoryNames();
   const batchNames = useGetBatchNames();
 
-
   const {
     setValue,
     watch,
@@ -76,7 +75,9 @@ const FilterItems = (props: Props) => {
           />
 
           <SelectList
-            options={itemCategoryName.data}
+            options={itemCategoryName.data?.map((t) => {
+              return { id: t.id, name: t.type };
+            })}
             value={values.category_id}
             onChange={(val) => {
               setValue("category_id", val ? val : "");

@@ -19,9 +19,8 @@ const headers = [
   "Balance",
 ];
 
-
 const PurchaseBookTable = (props) => {
-  const {purchaseBook, handleFilter} = props
+  const { purchaseBook, handleFilter } = props;
 
   const isEmpty = useMemo(() => {
     return purchaseBook.items?.length === 0;
@@ -32,9 +31,7 @@ const PurchaseBookTable = (props) => {
   return (
     <>
       <div className="mb-5">
-        <FilterPurchaseBook
-          onFilter={handleFilter}
-        />
+        <FilterPurchaseBook onFilter={handleFilter} />
       </div>
       <Ternary
         when={credit | paid | balance}
@@ -84,13 +81,14 @@ const PurchaseBookTable = (props) => {
         {items?.map((item) => {
           return (
             <TableRow key={item.id}>
-              <TableCell
-                content={dayjs(item.date).format("DD-MM-YYYY")}
-              />
+              <TableCell content={dayjs(item.date).format("DD-MM-YYYY")} />
               <TableCell content={item.quantity} />
               <TableCell content={item.price || "-"} />
               <TableCell content={item.amount} />
-              <TableCell className={`${item.type === "return" ? "text-red-700":"text-black"} capitalize`} content={item.type || "-"} />
+              <TableCell
+                className={`${item.type === "return" ? "text-red-700" : "text-black"} capitalize`}
+                content={item.type || "-"}
+              />
               <TableCell content={item.balance || "-"} />
             </TableRow>
           );

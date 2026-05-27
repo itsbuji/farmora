@@ -1,4 +1,4 @@
 export type NameResponse = {
-	id: number;
-	name: string;
+  id: number;
+  name: string;
 };

@@ -1,8 +1,8 @@
-import { useTheme, alpha } from '@mui/material';
+import { useTheme, alpha } from "@mui/material";
 
 const DataLoading = () => {
   const theme = useTheme();
-  
+
   // Create a very light gray-tinted green (85% gray + 15% primary color)
   const iconColor = alpha(theme.palette.primary.main, 0.15);
   const textColor = alpha(theme.palette.primary.main, 0.2);

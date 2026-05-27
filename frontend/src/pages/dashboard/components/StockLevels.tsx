@@ -1,5 +1,11 @@
-import { Card, CardContent, Typography, Box, LinearProgress } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  LinearProgress,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 interface StockLevel {
   name: string;
@@ -26,7 +32,9 @@ export const StockLevels = ({ stocks }: StockLevelsProps) => {
 
           return (
             <Box key={index} sx={{ mb: index !== stocks.length - 1 ? 3 : 0 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+              >
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   {stock.name}
                 </Typography>
@@ -41,9 +49,11 @@ export const StockLevels = ({ stocks }: StockLevelsProps) => {
                   height: 8,
                   borderRadius: 4,
                   bgcolor: `${theme.palette.divider}`,
-                  '& .MuiLinearProgress-bar': {
+                  "& .MuiLinearProgress-bar": {
                     borderRadius: 4,
-                    bgcolor: isLow ? theme.palette.error.main : theme.palette.primary.main,
+                    bgcolor: isLow
+                      ? theme.palette.error.main
+                      : theme.palette.primary.main,
                   },
                 }}
               />

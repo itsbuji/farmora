@@ -32,7 +32,11 @@ const AddGeneralSales = ({ isShow, onClose }: Props) => {
   });
 
   return (
-    <Dialog isOpen={isShow} headerTitle="Add General Sales" onClose={handleClose}>
+    <Dialog
+      isOpen={isShow}
+      headerTitle="Add General Sales"
+      onClose={handleClose}
+    >
       <DialogContent>
         <GeneralSalesForm methods={methods} onSubmit={onSubmit} />
       </DialogContent>

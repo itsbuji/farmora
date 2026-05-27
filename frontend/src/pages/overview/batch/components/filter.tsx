@@ -8,105 +8,105 @@ import { useEffect, useState } from "react";
 import useGetSeasonNameList from "@hooks/use-get-season-names";
 
 type Props = {
-	onFilter: (v: BatchOverviewFilterRequest) => Promise<void>;
+  onFilter: (v: BatchOverviewFilterRequest) => Promise<void>;
 };
 
 const defaultValues: BatchOverviewFilterRequest = {
-	season_id: "",
-	batch_id: "",
+  season_id: "",
+  batch_id: "",
 };
 
 const FilterBatchOverview = ({ onFilter }: Props) => {
-	const methods = useForm<BatchOverviewFilterRequest>({ defaultValues });
+  const methods = useForm<BatchOverviewFilterRequest>({ defaultValues });
 
-	const seasonsList = useGetSeasonNameList();
+  const seasonsList = useGetSeasonNameList();
 
-	const [batchList, setBatchList] = useState<BatchName[]>([]);
-	const {
-		formState: { errors },
-		watch,
-		setValue,
-		handleSubmit,
-		getValues,
-	} = methods;
-	const [seasonId, batchId] = watch(["season_id", "batch_id"]);
+  const [batchList, setBatchList] = useState<BatchName[]>([]);
+  const {
+    formState: { errors },
+    watch,
+    setValue,
+    handleSubmit,
+    getValues,
+  } = methods;
+  const [seasonId, batchId] = watch(["season_id", "batch_id"]);
 
-	useEffect(() => {
-		document.addEventListener("batchOverview:batch-closed", () => {
-			const values = getValues();
-			onFilter(values);
-		});
-	}, []);
+  useEffect(() => {
+    document.addEventListener("batchOverview:batch-closed", () => {
+      const values = getValues();
+      onFilter(values);
+    });
+  }, []);
 
-	useEffect(() => {
-		const handleGetBatchBySeasonId = async (seasonId: number) => {
-			const res = await batches.getBySeasonId(seasonId);
+  useEffect(() => {
+    const handleGetBatchBySeasonId = async (seasonId: number) => {
+      const res = await batches.getBySeasonId(seasonId);
 
-			if (res.status === "success") {
-				if (res.data) {
-					setBatchList(res.data);
-					return;
-				}
-			}
-			setBatchList([]);
-		};
+      if (res.status === "success") {
+        if (res.data) {
+          setBatchList(res.data);
+          return;
+        }
+      }
+      setBatchList([]);
+    };
 
-		if (seasonId) {
-			handleGetBatchBySeasonId(seasonId);
-		} else {
-			setBatchList([]);
-		}
-	}, [seasonId]);
+    if (seasonId) {
+      handleGetBatchBySeasonId(seasonId);
+    } else {
+      setBatchList([]);
+    }
+  }, [seasonId]);
 
-	const handleFilter = handleSubmit(
-		async (inputData: BatchOverviewFilterRequest) => {
-			onFilter(inputData);
-		},
-	);
+  const handleFilter = handleSubmit(
+    async (inputData: BatchOverviewFilterRequest) => {
+      onFilter(inputData);
+    },
+  );
 
-	return (
-		<div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-				<SelectList
-					options={seasonsList.data}
-					value={seasonId}
-					onChange={(val) => {
-						if (val) {
-							setValue("season_id", val);
-							setValue("batch_id", "");
-						}
-					}}
-					label="Season *"
-					name="season_id"
-					error={Boolean(errors.season_id)}
-					helperText={errors.season_id?.message}
-				/>
+  return (
+    <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <SelectList
+          options={seasonsList.data}
+          value={seasonId}
+          onChange={(val) => {
+            if (val) {
+              setValue("season_id", val);
+              setValue("batch_id", "");
+            }
+          }}
+          label="Season *"
+          name="season_id"
+          error={Boolean(errors.season_id)}
+          helperText={errors.season_id?.message}
+        />
 
-				<SelectList
-					options={batchList}
-					value={batchId}
-					onChange={(val) => {
-						setValue("batch_id", val ? val : "");
-					}}
-					label="Batch *"
-					name="batch_id"
-					error={Boolean(errors.batch_id)}
-					helperText={errors.batch_id?.message}
-					disabled={!seasonId}
-				/>
-			</div>
+        <SelectList
+          options={batchList}
+          value={batchId}
+          onChange={(val) => {
+            setValue("batch_id", val ? val : "");
+          }}
+          label="Batch *"
+          name="batch_id"
+          error={Boolean(errors.batch_id)}
+          helperText={errors.batch_id?.message}
+          disabled={!seasonId}
+        />
+      </div>
 
-			<div className="flex justify-end">
-				<Button
-					variant="contained"
-					onClick={handleFilter}
-					disabled={!seasonId || !batchId}
-				>
-					Apply Filters
-				</Button>
-			</div>
-		</div>
-	);
+      <div className="flex justify-end">
+        <Button
+          variant="contained"
+          onClick={handleFilter}
+          disabled={!seasonId || !batchId}
+        >
+          Apply Filters
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 export default FilterBatchOverview;

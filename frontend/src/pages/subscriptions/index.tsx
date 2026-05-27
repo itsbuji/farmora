@@ -25,7 +25,10 @@ const SubscriptionsPage = () => {
         <SubscriptionTable onEdit={(id) => setSelectedId(id)} />
       </div>
       <AddSubscription isShow={isOpen} onClose={onClose} />
-      <EditSubscription selectedId={selectedId} onClose={() => setSelectedId(null)} />
+      <EditSubscription
+        selectedId={selectedId}
+        onClose={() => setSelectedId(null)}
+      />
     </>
   );
 };

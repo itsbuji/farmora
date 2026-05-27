@@ -1,4 +1,4 @@
-import type { 
+import type {
   WorkingCostListResponse,
   NewWorkingCostRequest,
 } from "@app-types/working-cost.types";
