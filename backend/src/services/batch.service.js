@@ -19,15 +19,11 @@ const getNames = async (currentUser, filter) => {
 		filter.master_id = currentUser.id
 	}
 
-	if (filter.status === "active" || !filter.status) {
+	if (filter.status === "active") {
 		filter.closed_on = {
 			[Op.is]: null
 		}
-	} else {
-		filter.closed_on = {
-			[Op.not]: null
-		}
-	}
+	} 
 
 	const records = await BatchModel.findAll({
 		where: filter,
