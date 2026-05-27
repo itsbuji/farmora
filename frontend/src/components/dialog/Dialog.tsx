@@ -11,10 +11,9 @@ type Props = {
 const Dialog = ({ headerTitle, children, isOpen, onClose }: Props) => {
   if (!isOpen) return null;
 
-const theme = useTheme()
   return (
     <div
-      className={`fixed inset-0 z-${theme.zIndex.drawer + 1} bg-black/50 overflow-y-auto`}
+      className={`fixed inset-0 z-100 bg-black/50 overflow-y-auto`}
       onClick={onClose}
     >
       <div className="min-h-screen flex items-start justify-center p-4">
