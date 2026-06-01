@@ -241,7 +241,7 @@ const getSalesLedger = async (filter, currentUser) => {
   // Fetch all sales for the buyer in date range
   const sales = await SalesModel.findAll({
     where: whereClause,
-    order: [['date', 'DESC']],
+    order: [['date', 'ASC']],
     attributes: [
       'id',
       'date',
@@ -259,7 +259,7 @@ const getSalesLedger = async (filter, currentUser) => {
 
   for (const s of sales) {
     if (s.payment_type === 'credit') {
-      balance = parseFloat(s.amount) + parseFloat(balance)
+      balance = parseFloat(balance) - parseFloat(s.amount)
     }
     items.unshift({
       created_date: s.date,
