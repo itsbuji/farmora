@@ -157,7 +157,7 @@ const getPurchaseBook = async (filter, currentUser) => {
     console.log(item.type)
     if (item.type === 'credit') {
       balance = parseFloat(balance) + parseFloat(item.amount)
-    } else if (item.type === 'credit') {
+    } else if (item.type === 'return') {
       balance = parseFloat(balance) - parseFloat(item.amount)
     }
     const newObj = {
