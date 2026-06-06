@@ -15,9 +15,10 @@ type AddMethod = UseFormReturn<NewGeneralSalesRequest, any, FieldValues>;
 type Props = {
   methods: EditMethod | AddMethod;
   onSubmit: (payload: any) => void;
+  onCancel?: () => void;
 };
 
-const GeneralSalesForm = ({ methods, onSubmit }: Props) => {
+const GeneralSalesForm = ({ methods, onSubmit, onCancel }: Props) => {
   const seasonNames = useGetSeasonNames({ status: "active" });
 
   const {
@@ -95,7 +96,12 @@ const GeneralSalesForm = ({ methods, onSubmit }: Props) => {
             size="small"
           />
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

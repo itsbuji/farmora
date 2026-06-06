@@ -13,9 +13,10 @@ type Props = {
   defaultValues: DefaultValues<IntegrationBookFormValues>;
   onSubmit: (payload: IntegrationBookFormValues) => void;
   apiErrors: ValidationError[];
+  onCancel?: () => void;
 };
 
-const IntegrationBookForm = ({ onSubmit, defaultValues, apiErrors }: Props) => {
+const IntegrationBookForm = ({ onSubmit, defaultValues, apiErrors, onCancel }: Props) => {
   const methods = useForm<IntegrationBookFormValues>({
     defaultValues: defaultValues,
   });
@@ -99,7 +100,12 @@ const IntegrationBookForm = ({ onSubmit, defaultValues, apiErrors }: Props) => {
           </RHFTextField>
 	*/}
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

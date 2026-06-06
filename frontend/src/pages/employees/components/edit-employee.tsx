@@ -39,6 +39,7 @@ const EditEmployee = (props: Props) => {
                 defaultValues={selectedData}
                 hidePassword
                 apiError={errors}
+                onCancel={handleClose}
               />
             }
           />

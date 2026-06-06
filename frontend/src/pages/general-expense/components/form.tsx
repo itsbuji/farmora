@@ -13,10 +13,11 @@ type Props = {
   onSubmit: (payload: any) => void;
   defaultValues: DefaultValues<GeneralExpanceFormValues>;
   apiErros: ValidationError[];
+  onCancel?: () => void;
 };
 
 const GeneralExpenseForm = (props: Props) => {
-  const { onSubmit, defaultValues, apiErros } = props;
+  const { onSubmit, defaultValues, apiErros, onCancel } = props;
   const seasonNames = useGetSeasonNames();
 
   const methods = useForm<GeneralExpanceFormValues>({
@@ -112,7 +113,12 @@ const GeneralExpenseForm = (props: Props) => {
             size="small"
           />
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

@@ -49,7 +49,7 @@ const AddSale = ({ isShow, onClose, refetch }: Props) => {
   return (
     <Dialog isOpen={isShow} headerTitle="Add New Sale" onClose={handleClose}>
       <DialogContent>
-        <SaleForm methods={methods} onSubmit={onSubmit} />
+        <SaleForm methods={methods} onSubmit={onSubmit} onCancel={handleClose} />
       </DialogContent>
     </Dialog>
   );

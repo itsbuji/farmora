@@ -36,6 +36,7 @@ const EditSeason = ({ selectedId, onClose }: Props) => {
               onSubmit={onSubmit}
               defaultValues={selectedData}
               apiError={errors}
+              onCancel={handleClose}
             />
           }
         />

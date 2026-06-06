@@ -38,7 +38,7 @@ const AddSalesBookEntry = ({ isShow, onClose }: Props) => {
       onClose={handleClose}
     >
       <DialogContent>
-        <SalesBookForm methods={methods} onSubmit={onSubmit} />
+        <SalesBookForm methods={methods} onSubmit={onSubmit} onCancel={handleClose} />
       </DialogContent>
     </Dialog>
   );

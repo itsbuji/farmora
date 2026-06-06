@@ -36,7 +36,7 @@ const EditSubscription = ({ selectedId, onClose }: Props) => {
   return (
     <Dialog isOpen={isShow} headerTitle="Edit Subscription" onClose={onClose}>
       <DialogContent>
-        <SubscriptionForm methods={methods} onSubmit={onSubmit} />
+        <SubscriptionForm methods={methods} onSubmit={onSubmit} onCancel={handleClose} />
       </DialogContent>
     </Dialog>
   );

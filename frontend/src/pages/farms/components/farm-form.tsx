@@ -9,10 +9,11 @@ type Props = {
   defaultValues: DefaultValues<FarmFormValues>;
   onSubmit: (payload: FarmFormValues) => void;
   apiErrors: ValidationError[];
+  onCancel?: () => void;
 };
 
 const FarmForm = (props: Props) => {
-  const { onSubmit, defaultValues, apiErrors } = props;
+  const { onSubmit, defaultValues, apiErrors, onCancel } = props;
   const methods = useForm<FarmFormValues>({
     defaultValues: defaultValues,
   });
@@ -59,7 +60,12 @@ const FarmForm = (props: Props) => {
             size="small"
           />
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

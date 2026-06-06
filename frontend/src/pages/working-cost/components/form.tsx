@@ -13,9 +13,10 @@ type Props = {
   defaultValues: DefaultValues<WorkingCostFormValues>;
   onSubmit: (payload: WorkingCostFormValues) => void;
   apiErrors: ValidationError[];
+  onCancel?: () => void;
 };
 
-const WorkingCostForm = ({ onSubmit, defaultValues, apiErrors }: Props) => {
+const WorkingCostForm = ({ onSubmit, defaultValues, apiErrors, onCancel }: Props) => {
   const methods = useForm<WorkingCostFormValues>({
     defaultValues: defaultValues,
   });
@@ -105,7 +106,12 @@ const WorkingCostForm = ({ onSubmit, defaultValues, apiErrors }: Props) => {
             <MenuItem value="expense">Income</MenuItem>
           </RHFTextField>
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

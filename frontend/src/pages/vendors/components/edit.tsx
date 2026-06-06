@@ -35,6 +35,7 @@ const EditVendor = (props: Props) => {
             onSubmit={onSubmit}
             defaultValues={selectedData}
             apiError={errors}
+            onCancel={handleClose}
           />
         ) : null}
       </DialogContent>

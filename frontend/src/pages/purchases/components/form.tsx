@@ -19,9 +19,10 @@ type Props = {
   defaultValues: DefaultValues<PurchaseFormValues>;
   onSubmit: (payload: any) => void;
   apiError: ValidationError[];
+  onCancel?: () => void;
 };
 
-const PurchaseForm = ({ onSubmit, defaultValues, apiError }: Props) => {
+const PurchaseForm = ({ onSubmit, defaultValues, apiError, onCancel }: Props) => {
   const methods = useForm({ defaultValues });
   const {
     handleSubmit,
@@ -332,7 +333,17 @@ const PurchaseForm = ({ onSubmit, defaultValues, apiError }: Props) => {
           </div>
         </div>
 
-        <div className="mt-6 flex justify-stretch md:justify-end">
+        <div className="mt-6 flex justify-stretch md:justify-end gap-2">
+          {onCancel && (
+            <Button
+              variant="outlined"
+              type="button"
+              onClick={onCancel}
+              className="w-full md:w-auto"
+            >
+              Cancel
+            </Button>
+          )}
           <Button
             variant="contained"
             type="submit"

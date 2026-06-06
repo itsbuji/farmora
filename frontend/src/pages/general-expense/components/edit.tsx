@@ -84,6 +84,7 @@ const EditGeneralExpense = ({ selectedId, onClose }: Props) => {
           onSubmit={onSubmit}
           defaultValues={selectedData}
           apiErros={errors}
+          onCancel={handleClose}
         />
       </DialogContent>
     </Dialog>

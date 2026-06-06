@@ -14,9 +14,10 @@ type AddMethod = UseFormReturn<NewSalesBookEntryRequest, any, FieldValues>;
 type Props = {
   methods: AddMethod;
   onSubmit: (payload: any) => void;
+  onCancel?: () => void;
 };
 
-const SalesBookForm = ({ methods, onSubmit }: Props) => {
+const SalesBookForm = ({ methods, onSubmit, onCancel }: Props) => {
   const vendorsList = useQuery<{ data: Vendor[] }>({
     queryKey: ["vendors:all"],
     queryFn: vendors.fetchAll,
@@ -93,7 +94,12 @@ const SalesBookForm = ({ methods, onSubmit }: Props) => {
             size="small"
           />
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

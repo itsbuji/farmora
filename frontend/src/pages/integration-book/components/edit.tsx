@@ -38,6 +38,7 @@ const EditIntegrationBook = ({ selectedId, onClose, refetch }: Props) => {
           onSubmit={onSubmit}
           defaultValues={selectedData}
           apiErrors={errors}
+          onCancel={handleClose}
         />
       </DialogContent>
     </Dialog>

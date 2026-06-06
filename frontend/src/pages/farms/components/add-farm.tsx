@@ -35,6 +35,7 @@ const AddFarm = (props: Props) => {
           onSubmit={onSubmit}
           defaultValues={defaultValues}
           apiErrors={errors}
+          onCancel={handleClose}
         />
       </DialogContent>
     </Dialog>

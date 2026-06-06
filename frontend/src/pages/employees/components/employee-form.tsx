@@ -10,10 +10,11 @@ type Props = {
   onSubmit: (payload: any) => void;
   hidePassword?: boolean;
   apiError: ValidationError[];
+  onCancel?: () => void;
 };
 
 const EmployeeForm = (props: Props) => {
-  const { onSubmit, defaultValues, hidePassword, apiError } = props;
+  const { onSubmit, defaultValues, hidePassword, apiError, onCancel } = props;
 
   const methods = useForm<EmployeeFormValues>({
     defaultValues,
@@ -67,7 +68,12 @@ const EmployeeForm = (props: Props) => {
             }
           />
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

@@ -37,6 +37,7 @@ const EditItemCategory = ({ selectedId, onClose, refetch }: Props) => {
               onSubmit={onSubmit}
               defaultValues={selectedData}
               apiError={errors}
+              onCancel={handleClose}
             />
           }
         />

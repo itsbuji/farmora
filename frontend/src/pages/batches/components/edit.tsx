@@ -46,6 +46,7 @@ const EditBatch = ({
               onSubmit={onSubmit}
               defaultValues={selectedData}
               apiError={errors}
+              onCancel={handleClose}
             />
           }
         />

@@ -54,6 +54,7 @@ const AddGeneralExpense = ({ isShow, onClose }: Props) => {
           onSubmit={onSubmit}
           defaultValues={defaultValues}
           apiErros={errors}
+          onCancel={handleClose}
         />
       </DialogContent>
     </Dialog>

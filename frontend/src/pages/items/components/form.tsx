@@ -12,9 +12,10 @@ type Props = {
   defaultValues: DefaultValues<ItemFormValues>;
   onSubmit: (payload: any) => void;
   apiError: ValidationError[];
+  onCancel?: () => void;
 };
 
-const ItemForm = ({ onSubmit, defaultValues, apiError }: Props) => {
+const ItemForm = ({ onSubmit, defaultValues, apiError, onCancel }: Props) => {
   const methods = useForm<ItemFormValues>({
     defaultValues: defaultValues,
   });
@@ -85,7 +86,12 @@ const ItemForm = ({ onSubmit, defaultValues, apiError }: Props) => {
               return <MenuItem value={value}>{label}</MenuItem>;
             })}
           </RHFTextField>
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            {onCancel && (
+              <Button variant="outlined" type="button" onClick={onCancel}>
+                Cancel
+              </Button>
+            )}
             <Button variant="contained" type="submit">
               Submit
             </Button>

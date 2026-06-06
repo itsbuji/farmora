@@ -51,11 +51,12 @@ const AddPurchase = ({ isShow, onClose, filterButtonRef }: Props) => {
       onClose={handleClose}
     >
       <DialogContent>
-        <PurchaseForm
-          onSubmit={onSubmit}
-          defaultValues={defaultValues}
-          apiError={errors}
-        />
+          <PurchaseForm
+            onSubmit={onSubmit}
+            defaultValues={defaultValues}
+            apiError={errors}
+            onCancel={handleClose}
+          />
       </DialogContent>
     </Dialog>
   );

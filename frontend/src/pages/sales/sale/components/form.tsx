@@ -12,9 +12,10 @@ import { useEffect, useMemo, useState } from "react";
 type Props = {
   methods: any;
   onSubmit: (payload: any) => void;
+  onCancel?: () => void;
 };
 
-const SaleForm = ({ methods, onSubmit }: Props) => {
+const SaleForm = ({ methods, onSubmit, onCancel }: Props) => {
   const {
     handleSubmit,
     setValue,
@@ -236,7 +237,12 @@ const SaleForm = ({ methods, onSubmit }: Props) => {
             className="md:col-span-2"
           />
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

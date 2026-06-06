@@ -37,6 +37,7 @@ const AddSeason = ({ isShow, onClose }: Props) => {
           onSubmit={onSubmit}
           defaultValues={defaultValues}
           apiError={errors}
+          onCancel={handleClose}
         />
       </DialogContent>
     </Dialog>

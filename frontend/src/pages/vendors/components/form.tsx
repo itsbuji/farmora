@@ -8,9 +8,10 @@ type Props = {
   onSubmit: (inputData: VendorFormValues) => void;
   defaultValues: DefaultValues<VendorFormValues>;
   apiError: ValidationError[];
+  onCancel?: () => void;
 };
 
-const VendorForm = ({ onSubmit, defaultValues, apiError }: Props) => {
+const VendorForm = ({ onSubmit, defaultValues, apiError, onCancel }: Props) => {
   const methods = useForm<VendorFormValues>({ defaultValues });
 
   const {
@@ -72,7 +73,12 @@ const VendorForm = ({ onSubmit, defaultValues, apiError }: Props) => {
           <MenuItem value="customer">Customer</MenuItem>
         </TextField>
       </div>
-      <div className="flex justify-end mt-6">
+      <div className="flex justify-end mt-6 gap-2">
+        {onCancel && (
+          <Button variant="outlined" type="button" onClick={onCancel}>
+            Cancel
+          </Button>
+        )}
         <Button variant="contained" type="submit">
           Submit
         </Button>

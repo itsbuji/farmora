@@ -38,6 +38,7 @@ const AddVendor = (props: Props) => {
           onSubmit={onSubmit}
           defaultValues={defaultValues}
           apiError={errors}
+          onCancel={handleClose}
         />
       </DialogContent>
     </Dialog>

@@ -35,7 +35,7 @@ const AddSubscription = ({ isShow, onClose }: Props) => {
       onClose={handleClose}
     >
       <DialogContent>
-        <SubscriptionForm methods={methods} onSubmit={onSubmit} />
+        <SubscriptionForm methods={methods} onSubmit={onSubmit} onCancel={handleClose} />
       </DialogContent>
     </Dialog>
   );

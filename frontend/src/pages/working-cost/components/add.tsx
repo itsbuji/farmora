@@ -40,6 +40,7 @@ const AddWorkingCost = ({ isShow, onClose, refetch }: Props) => {
           onSubmit={onSubmit}
           defaultValues={defaultValues}
           apiErrors={errors}
+          onCancel={handleClose}
         />
       </DialogContent>
     </Dialog>

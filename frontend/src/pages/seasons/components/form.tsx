@@ -11,10 +11,11 @@ type Props = {
   defaultValues: DefaultValues<SeasonFormValues>;
   onSubmit: (payload: any) => void;
   apiError: ValidationError[];
+  onCancel?: () => void;
 };
 
 const SeasonForm = (props: Props) => {
-  const { onSubmit, defaultValues, apiError } = props;
+  const { onSubmit, defaultValues, apiError, onCancel } = props;
   const methods = useForm<SeasonFormValues>({
     defaultValues: defaultValues,
   });
@@ -104,7 +105,12 @@ const SeasonForm = (props: Props) => {
           </RHFTextField>
         </div>
 
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

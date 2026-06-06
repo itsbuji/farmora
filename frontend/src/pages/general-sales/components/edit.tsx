@@ -48,7 +48,7 @@ const EditGeneralSales = ({ selectedId, onClose }: Props) => {
       onClose={handleClose}
     >
       <DialogContent>
-        <GeneralSalesForm methods={methods} onSubmit={onSubmit} />
+        <GeneralSalesForm methods={methods} onSubmit={onSubmit} onCancel={handleClose} />
       </DialogContent>
     </Dialog>
   );

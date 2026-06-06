@@ -13,9 +13,10 @@ type AddMethod = UseFormReturn<NewSubscriptionRequest, any, FieldValues>;
 type Props = {
   methods: EditMethod | AddMethod;
   onSubmit: (payload: any) => void;
+  onCancel?: () => void;
 };
 
-const SubscriptionForm = ({ methods, onSubmit }: Props) => {
+const SubscriptionForm = ({ methods, onSubmit, onCancel }: Props) => {
   const {
     handleSubmit,
     setValue,
@@ -41,7 +42,12 @@ const SubscriptionForm = ({ methods, onSubmit }: Props) => {
             helperText={errors.package_id?.message}
           />
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

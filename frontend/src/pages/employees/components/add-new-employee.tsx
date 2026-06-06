@@ -43,6 +43,7 @@ const AddNewEmployee = (props: AddNewEmployeeType) => {
             defaultValues={defaultValues}
             onSubmit={onSubmit}
             apiError={errors}
+            onCancel={handleClose}
           />
         </DialogContent>
       </Dialog>

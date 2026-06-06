@@ -36,6 +36,7 @@ const AddBatch = ({ isShow, onClose, refetch }: Props) => {
           onSubmit={onSubmit}
           defaultValues={defaultValues}
           apiError={errors}
+          onCancel={handleClose}
         />
       </DialogContent>
     </Dialog>

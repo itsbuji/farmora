@@ -42,6 +42,7 @@ const EditItem = ({ selectedId, onClose, filterButtonRef }: Props) => {
               onSubmit={onSubmit}
               defaultValues={selectedData}
               apiError={errors}
+              onCancel={handleClose}
             />
           }
         />
