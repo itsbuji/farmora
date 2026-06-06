@@ -148,8 +148,8 @@ const PurchaseBookPage = () => {
               />
             </div>
             <div className="flex justify-end mt-6 gap-2">
-              <Button variant="default" type="button" onClick={onClose}>
-                Close
+              <Button variant="outlined" type="button" onClick={onClose}>
+                Cancel
               </Button>
               <Button variant="contained" type="submit">
                 Submit
