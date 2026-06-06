@@ -1011,141 +1011,65 @@ const getBalanceSheet = async (filter, currentUser) => {
 
   const masterId = getMasterId(currentUser)
 
-  const openingBalance = await getOpeningBalance(masterId)
+  // -----------------------------------------------------------------------
+  // PHASE 1 — Fetch all raw records in parallel
+  // -----------------------------------------------------------------------
+  const records = await fetchAllRecords(masterId, from_date, to_date)
+  const { openingBalance } = records
 
-  const purchasesData = await getPurchasesData(masterId, from_date, to_date)
-  const salesData = await getSalesData(masterId, from_date, to_date)
-  const purchaseReturnsData = await getPurchaseReturnsData(
-    masterId,
-    from_date,
-    to_date
+  // -----------------------------------------------------------------------
+  // PHASE 2 — Transform each category into unified transactions
+  // -----------------------------------------------------------------------
+  const saleTxns = saleToTransactions(records.sales)
+  const purchaseTxns = purchaseToTransactions(records.purchases)
+  const returnTxns = purchaseReturnToTransactions(records.purchaseReturns)
+  const workingTxns = workingCostToTransactions(records.workingCosts)
+  const expenseTxns = generalExpenseToTransactions(records.generalExpenses)
+  const expenseSaleTxns = expenseSaleToTransactions(records.expenseSales)
+  const integTxns = integrationBookToTransactions(records.integrationBooks)
+
+  // -----------------------------------------------------------------------
+  // PHASE 3 — Merge & sort by date
+  // -----------------------------------------------------------------------
+  const sorted = mergeAndSort(
+    saleTxns,
+    purchaseTxns,
+    returnTxns,
+    workingTxns,
+    expenseTxns,
+    expenseSaleTxns,
+    integTxns
   )
-  const workingCostsData = await getWorkingCostsData(
-    masterId,
-    from_date,
-    to_date
-  )
-  const generalExpensesData = await getGeneralExpensesData(
-    masterId,
-    from_date,
-    to_date
-  )
-  const expenseSalesData = await getExpenseSalesData(
-    masterId,
-    from_date,
-    to_date
-  )
-  const integrationBooksData = await getIntegrationBooksData(
-    masterId,
-    from_date,
-    to_date
-  )
 
-  const totalIn =
-    salesData.in +
-    purchaseReturnsData.in +
-    workingCostsData.in +
-    expenseSalesData.in
+  // -----------------------------------------------------------------------
+  // PHASE 4 — Filter by purpose (before running balance so balance reflects
+  //            the filtered subset)
+  // -----------------------------------------------------------------------
+  const filtered = filterByPurpose(sorted, purpose)
 
-  const totalOut =
-    purchasesData.out +
-    workingCostsData.out +
-    generalExpensesData.out +
-    integrationBooksData.out
+  // -----------------------------------------------------------------------
+  // PHASE 5 — Running balance starting at openingBalance
+  // -----------------------------------------------------------------------
+  const withBalance = calculateRunningBalance(filtered, openingBalance)
 
-  const liability =
-    purchasesData.liability +
-    integrationBooksData.liability -
-    purchaseReturnsData.liabilityReduction
+  // -----------------------------------------------------------------------
+  // PHASE 6 — Derive summary + breakdown from raw data
+  // -----------------------------------------------------------------------
+  const summary = deriveSummary(withBalance, records, openingBalance)
+  const breakdown = buildBreakdown(records)
 
-  const receivable = salesData.receivable
+  // -----------------------------------------------------------------------
+  // FORMAT — Round, format dates, reverse for newest-first output
+  // -----------------------------------------------------------------------
+  const transactions = formatTransactions(withBalance).reverse()
 
-  const net = totalIn - totalOut
-  const closingBalance = openingBalance + net
-
-  const breakdown = {
-    purchases: {
-      in: purchasesData.in,
-      out: purchasesData.out,
-      liability: purchasesData.liability,
-    },
-    sales: {
-      in: salesData.in,
-      out: 0,
-      receivable: salesData.receivable,
-    },
-    purchase_returns: {
-      in: purchaseReturnsData.in,
-      out: 0,
-      liability_reduction: purchaseReturnsData.liabilityReduction,
-    },
-    working_costs: {
-      in: workingCostsData.in,
-      out: workingCostsData.out,
-    },
-    general_expenses: {
-      in: 0,
-      out: generalExpensesData.out,
-    },
-    expense_sales: {
-      in: expenseSalesData.in,
-      out: 0,
-    },
-    integration_books: {
-      in: 0,
-      out: integrationBooksData.out,
-      liability: integrationBooksData.liability,
-    },
-  }
-
-  const rawTransactions = await getAllTransactions(masterId, from_date, to_date)
-  const filteredTransactions = filterTransactionsByPurpose(
-    rawTransactions,
-    purpose
-  )
-  const transactions = calculateRunningBalance(filteredTransactions, 0)
-
-  let inAmount = 0
-  let outAmount = 0
-  const formattedTransactions = transactions.map((t) => {
-    const parsedAmount = parseFloat(t.amount.toFixed(2))
-    if (t.type === 'in') {
-      inAmount += parsedAmount
-    } else {
-      outAmount += parsedAmount
-    }
-    return {
-      date: formatTransactionDate(t.date),
-      purpose: t.purpose,
-      type: t.type,
-      amount: parseFloat(t.amount.toFixed(2)),
-      balance: parseFloat(t.balance.toFixed(2)),
-    }
-  })
-
-  let inA = 0,
-    outA = 0
-  for (let t of transactions) {
-    if (t.type === 'in') {
-      inA += t.amount
-    } else {
-      outA += t.amount
-    }
-  }
   return {
-    opening_balance: parseFloat(openingBalance.toFixed(2)),
+    opening_balance: round(openingBalance),
     from_date: from_date || null,
     to_date: to_date || null,
-    summary: {
-      total_in: parseFloat(inA.toFixed(2)),
-      total_out: parseFloat(outA.toFixed(2)),
-      liability: parseFloat(liability.toFixed(2)),
-      receivable: parseFloat(receivable.toFixed(2)),
-      net: parseFloat(net.toFixed(2)),
-      closing_balance: parseFloat(closingBalance.toFixed(2)),
-    },
+    summary,
     breakdown,
-    transactions: formattedTransactions.reverse() || [],
+    transactions,
   }
 }
 
