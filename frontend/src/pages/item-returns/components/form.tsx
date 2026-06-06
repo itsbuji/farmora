@@ -11,9 +11,10 @@ import { useEffect } from "react";
 type Props = {
   methods: any;
   onSubmit: (payload: any) => void;
+  onCancel?: () => void;
 };
 
-const ItemReturnForm = ({ methods, onSubmit }: Props) => {
+const ItemReturnForm = ({ methods, onSubmit, onCancel }: Props) => {
   const {
     handleSubmit,
     register,
@@ -206,7 +207,12 @@ const ItemReturnForm = ({ methods, onSubmit }: Props) => {
           </TextField>
 	  */}
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 gap-2">
+          {onCancel && (
+            <Button variant="outlined" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button variant="contained" type="submit">
             Submit
           </Button>

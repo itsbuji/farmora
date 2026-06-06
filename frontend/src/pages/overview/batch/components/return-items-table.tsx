@@ -16,7 +16,6 @@ type Props = {
 
 const ReturnItem = (props: Props) => {
   const { returns, totalReturnAmount, totalReturnFeeds } = props;
-  console.log(returns);
   return (
     <>
       <h3 className="text-lg font-semibold mb-3">Returned Items</h3>

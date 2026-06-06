@@ -84,7 +84,7 @@ const EditItemReturn = ({ selectedId, onClose }: Props) => {
   return (
     <Dialog isOpen={isShow} headerTitle="Edit Return" onClose={onClose}>
       <DialogContent>
-        <ItemReturnForm methods={methods} onSubmit={onSubmit} />
+        <ItemReturnForm methods={methods} onSubmit={onSubmit} onCancel={onClose} />
       </DialogContent>
     </Dialog>
   );
