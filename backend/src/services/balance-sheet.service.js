@@ -532,13 +532,16 @@ const filterByPurpose = (transactions, purpose) => {
 }
 
 const formatTransactions = (transactions) => {
-  return transactions.map((t) => ({
-    date: dayjs(t.date).format('YYYY-MM-DD'),
-    purpose: t.purpose,
-    type: t.type,
-    amount: round(t.amount),
-    balance: round(t.balance),
-  }))
+  return transactions.map((t) => {
+    return {
+      // date: dayjs(t.date).format('YYYY-MM-DD'),
+      date: t.date,
+      purpose: t.purpose,
+      type: t.type,
+      amount: round(t.amount),
+      balance: round(t.balance),
+    }
+  })
 }
 
 const getBalanceSheet = async (filter, currentUser) => {
