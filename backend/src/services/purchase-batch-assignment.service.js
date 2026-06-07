@@ -1,12 +1,12 @@
 import { ItemAssignmentNotFoundError } from '@errors/item.errors'
 import PurchaseBatchAssignmentModel from '@models/purchasebatchassignment'
 
-const create = async (payload) => {
+const createPurchaseBatchAssignment = async (payload) => {
   const newRecord = await PurchaseBatchAssignmentModel.create(payload)
   return newRecord
 }
 
-const getOneByBatchAndPurchaseId = async (batchId, purchaseId) => {
+const getAssignmentByBatchAndPurchase = async (batchId, purchaseId) => {
   const record = await PurchaseBatchAssignmentModel.findOne({
     where: {
       purchase_id: purchaseId,
@@ -20,9 +20,9 @@ const getOneByBatchAndPurchaseId = async (batchId, purchaseId) => {
   return record
 }
 
-const updateByBatchIdAndPurchaseId = async (payload) => {
+const updatePurchaseBatchAssignment = async (payload) => {
   const { purchase_id, batch_id, quantity } = payload
-  const record = await getOneByBatchAndPurchaseId(batch_id, purchase_id)
+  const record = await getAssignmentByBatchAndPurchase(batch_id, purchase_id)
   if (!record) {
     throw new ItemAssignmentNotFoundError(batch_id, purchase_id)
   }
@@ -34,9 +34,9 @@ const updateByBatchIdAndPurchaseId = async (payload) => {
 }
 
 const purchaseBatchAssignmentService = {
-  create,
-  getOneByBatchAndPurchaseId,
-  updateByBatchIdAndPurchaseId,
+  createPurchaseBatchAssignment,
+  getAssignmentByBatchAndPurchase,
+  updatePurchaseBatchAssignment,
 }
 
 export default purchaseBatchAssignmentService

@@ -7,7 +7,7 @@ import userRoles from '@utils/user-roles'
 import { Op } from 'sequelize'
 import logger from '@utils/logger'
 
-const create = async (payload, currentUser) => {
+const createSale = async (payload, currentUser) => {
   logger.debug({ payload, currentUser }, 'Creating sale: raw input')
 
   if (currentUser.user_type === userRoles.staff.type) {
@@ -39,7 +39,7 @@ const create = async (payload, currentUser) => {
   return newSale
 }
 
-const getAll = async (payload, currentUser) => {
+const listSales = async (payload, currentUser) => {
   const { page, limit, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -119,7 +119,7 @@ const getAll = async (payload, currentUser) => {
   }
 }
 
-const getById = async (saleId, currentUser) => {
+const getSaleById = async (saleId, currentUser) => {
   const filter = { id: saleId }
 
   if (currentUser.user_type === userRoles.staff.type) {
@@ -156,13 +156,13 @@ const getById = async (saleId, currentUser) => {
   return saleRecord
 }
 
-const updateById = async (id, payload, currentUser) => {
+const updateSale = async (id, payload, currentUser) => {
   logger.debug(
     { sale_id: id, updated_data: payload, actor_id: currentUser.id },
     'Updating sale: raw payload'
   )
 
-  const saleRecord = await getById(id, currentUser)
+  const saleRecord = await getSaleById(id, currentUser)
 
   // Recalculate avg_weight and amount if relevant fields are updated
   if (payload.weight !== undefined || payload.bird_no !== undefined) {
@@ -189,12 +189,12 @@ const updateById = async (id, payload, currentUser) => {
   logger.info({ sale_id: saleRecord.id }, 'Sale updated')
 }
 
-const deleteById = async (id, currentUser) => {
+const deleteSale = async (id, currentUser) => {
   logger.debug(
     { sale_id: id, actor_id: currentUser.id },
     'Deleting sale: resolving record'
   )
-  const saleRecord = await getById(id, currentUser)
+  const saleRecord = await getSaleById(id, currentUser)
   await saleRecord.destroy()
   logger.info({ sale_id: id, actor_id: currentUser.id }, 'Sale Deleted')
 }
@@ -285,7 +285,7 @@ const getSalesLedger = async (filter, currentUser) => {
   }
 }
 
-const addSalesBookEntry = async (payload, currentUser) => {
+const addSalesPayment = async (payload, currentUser) => {
   if (currentUser.user_type === userRoles.staff.type) {
     payload.master_id = currentUser.master_id
   } else {
@@ -301,13 +301,13 @@ const addSalesBookEntry = async (payload, currentUser) => {
 }
 
 const salesService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
+  createSale,
+  listSales,
+  getSaleById,
+  updateSale,
+  deleteSale,
   getSalesLedger,
-  addSalesBookEntry,
+  addSalesPayment,
 }
 
 export default salesService

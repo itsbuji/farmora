@@ -11,7 +11,7 @@ import PurchaseReturnModel from '@models/purchase-return'
 import PurchaseBookModel from '@models/purchasebook'
 import userRoles from '@utils/user-roles'
 import { Op } from 'sequelize'
-import purchaseBatchAssignmentService from '@services/purchase-batch-assignment'
+import purchaseBatchAssignmentService from '@services/purchase-batch-assignment.service'
 import PurchaseBatchAssignmentModel from '@models/purchasebatchassignment'
 import BatchModel from '@models/batch'
 import SeasonModel from '@models/season'
@@ -23,7 +23,7 @@ import FarmModel from '@models/farm'
 import IntegrationBookModel from '@models/integationbook'
 import { transport } from 'pino'
 
-const create = async (payload, currentUser) => {
+const createPurchase = async (payload, currentUser) => {
   const { quantity, assign_quantity } = payload
   if (assign_quantity) {
     const qty = quantity - assign_quantity
@@ -41,13 +41,13 @@ const create = async (payload, currentUser) => {
 
   payload.name = 'test'
 
-  const batch = await batchService.getById(payload.batch_id, currentUser)
+  const batch = await batchService.getBatchById(payload.batch_id, currentUser)
 
   payload.farm_id = batch.farm_id
   const newItem = await PurchaseModel.create(payload)
 
   if (payload.batch_id) {
-    await purchaseBatchAssignmentService.create({
+    await purchaseBatchAssignmentService.createPurchaseBatchAssignment({
       batch_id: payload.batch_id,
       purchase_id: newItem.id,
       quantity: payload.assign_quantity,
@@ -57,7 +57,7 @@ const create = async (payload, currentUser) => {
   return newItem
 }
 
-const createPurchaseBook = async (payload, currentUser) => {
+const addPurchasePayment = async (payload, currentUser) => {
   if (currentUser.user_type === userRoles.staff.type) {
     payload.master_id = currentUser.master_id
   } else {
@@ -67,7 +67,7 @@ const createPurchaseBook = async (payload, currentUser) => {
   return newRecord
 }
 
-const getPurchaseBook = async (filter, currentUser) => {
+const getPurchaseLedger = async (filter, currentUser) => {
   const { vendorId, start_date, end_date } = filter
   const whereClause = {
     vendor_id: vendorId,
@@ -97,7 +97,7 @@ const getPurchaseBook = async (filter, currentUser) => {
     returnWhereClause.master_id = currentUser.id
   }
 
-  const vendor = await vendorService.getById(vendorId, currentUser)
+  const vendor = await vendorService.getVendorById(vendorId, currentUser)
 
   const purchases = await PurchaseModel.findAll({
     where: {
@@ -193,11 +193,11 @@ const getPurchaseBook = async (filter, currentUser) => {
   }
 }
 
-const reassignToAnotherBatch = async (payload, currentUser) => {
+const reassignPurchaseToBatch = async (payload, currentUser) => {
   const { item_id, source_batch_id, target_batch_id, quantity } = payload
 
   const sourceAssignment =
-    await purchaseBatchAssignmentService.getOneByBatchAndPurchaseId(
+    await purchaseBatchAssignmentService.getAssignmentByBatchAndPurchase(
       source_batch_id,
       item_id
     )
@@ -211,7 +211,7 @@ const reassignToAnotherBatch = async (payload, currentUser) => {
   }
 
   const targetAssignment =
-    await purchaseBatchAssignmentService.getOneByBatchAndPurchaseId(
+    await purchaseBatchAssignmentService.getAssignmentByBatchAndPurchase(
       target_batch_id,
       item_id
     )
@@ -220,7 +220,7 @@ const reassignToAnotherBatch = async (payload, currentUser) => {
       quantity: sourceAssignment.quantity + quantity,
     })
   } else {
-    await assignItemToBatch(
+    await assignPurchaseToBatch(
       { item_id, batch_id: target_batch_id, quantity },
       currentUser,
       { reassign: true }
@@ -232,16 +232,16 @@ const reassignToAnotherBatch = async (payload, currentUser) => {
   })
 }
 
-const assignItemToBatch = async (payload, currentUser, opts = {}) => {
+const assignPurchaseToBatch = async (payload, currentUser, opts = {}) => {
   const { item_id, batch_id, quantity } = payload
 
   const assignmentRecord =
-    await purchaseBatchAssignmentService.getOneByBatchAndPurchaseId(
+    await purchaseBatchAssignmentService.getAssignmentByBatchAndPurchase(
       batch_id,
       item_id
     )
 
-  const itemRecord = await getById(item_id, currentUser)
+  const itemRecord = await getPurchaseById(item_id, currentUser)
   const qty = itemRecord.quantity - quantity
   if (qty < 0) {
     throw new ItemQuantityUnderflowError(qty)
@@ -252,18 +252,18 @@ const assignItemToBatch = async (payload, currentUser, opts = {}) => {
     payload.quantity = assignmentRecord.quantity + payload.quantity
 
     record =
-      await purchaseBatchAssignmentService.updateByBatchIdAndPurchaseId(payload)
+      await purchaseBatchAssignmentService.updatePurchaseBatchAssignment(payload)
   } else {
-    record = await purchaseBatchAssignmentService.create(payload)
+    record = await purchaseBatchAssignmentService.createPurchaseBatchAssignment(payload)
   }
 
   if (!opts.reassign) {
-    await updateById(item_id, { quantity: qty }, currentUser)
+    await updatePurchase(item_id, { quantity: qty }, currentUser)
   }
   return record
 }
 
-const getAll = async (payload, currentUser) => {
+const listPurchases = async (payload, currentUser) => {
   const { page, limit, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -322,7 +322,7 @@ const getAll = async (payload, currentUser) => {
   }
 }
 
-const getInternalPurchaseTypes = async (filter, type) => {
+const listPurchasesByItemType = async (filter, type) => {
   const rawPurchases = await PurchaseModel.findAll({
     where: filter,
     include: [
@@ -347,7 +347,7 @@ const getInternalPurchaseTypes = async (filter, type) => {
   return rawPurchases
 }
 
-const getIntegrationBook = async (filter, currentUser) => {
+const getIntegrationLedger = async (filter, currentUser) => {
   const { farm_id, start_date, end_date } = filter
 
   const whereClausePurchase = {}
@@ -386,7 +386,7 @@ const getIntegrationBook = async (filter, currentUser) => {
     }
   }
 
-  const rawPurchases = await getInternalPurchaseTypes(
+  const rawPurchases = await listPurchasesByItemType(
     whereClausePurchase,
     'integration'
   )
@@ -445,7 +445,7 @@ const getIntegrationBook = async (filter, currentUser) => {
   }
 }
 
-const getById = async (itemId, currentUser, opts = {}) => {
+const getPurchaseById = async (itemId, currentUser, opts = {}) => {
   const {} = opts
   const filter = { id: itemId }
 
@@ -475,7 +475,7 @@ const getById = async (itemId, currentUser, opts = {}) => {
   if (opts.asJSON) {
     const item = record.toJSON()
     const assignment =
-      await purchaseBatchAssignmentService.getOneByBatchAndPurchaseId(
+      await purchaseBatchAssignmentService.getAssignmentByBatchAndPurchase(
         record.batch.id,
         record.id
       )
@@ -489,15 +489,15 @@ const getById = async (itemId, currentUser, opts = {}) => {
   return record
 }
 
-const updateById = async (id, payload, currentUser) => {
+const updatePurchase = async (id, payload, currentUser) => {
   if (payload.quantity < payload.assign_quantity) {
     throw new ItemAssignQuantityError(payload.assign_quantity, payload.quantity)
   }
 
-  const purchaseRecord = await getById(id, currentUser)
+  const purchaseRecord = await getPurchaseById(id, currentUser)
 
   const currentAssignment =
-    await purchaseBatchAssignmentService.getOneByBatchAndPurchaseId(
+    await purchaseBatchAssignmentService.getAssignmentByBatchAndPurchase(
       payload.batch_id,
       id
     )
@@ -519,7 +519,7 @@ const updateById = async (id, payload, currentUser) => {
     }
     console.log('update data:', updateData)
     const updatedRecord =
-      await purchaseBatchAssignmentService.updateByBatchIdAndPurchaseId(
+      await purchaseBatchAssignmentService.updatePurchaseBatchAssignment(
         updateData
       )
     console.log('updated assignment: ', updatedRecord)
@@ -528,7 +528,7 @@ const updateById = async (id, payload, currentUser) => {
       currentAssignment.quantity
     )
   } else {
-    const newAssignment = await purchaseBatchAssignmentService.create({
+    const newAssignment = await purchaseBatchAssignmentService.createPurchaseBatchAssignment({
       purchase_id: id,
       batch_id: payload.batch_id,
       quantity: payload.assign_quantity,
@@ -543,23 +543,23 @@ const updateById = async (id, payload, currentUser) => {
   return updatedPurchaseRecord
 }
 
-const deleteById = async (id, currentUser) => {
-  const itemRecord = await getById(id, currentUser)
+const deletePurchase = async (id, currentUser) => {
+  const itemRecord = await getPurchaseById(id, currentUser)
   await itemRecord.destroy()
 }
 
 const purchaseService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
-  assignItemToBatch,
-  reassignToAnotherBatch,
-  getPurchaseBook,
-  getIntegrationBook,
-  getInternalPurchaseTypes,
-  createPurchaseBook,
+  createPurchase,
+  listPurchases,
+  getPurchaseById,
+  updatePurchase,
+  deletePurchase,
+  assignPurchaseToBatch,
+  reassignPurchaseToBatch,
+  getPurchaseLedger,
+  getIntegrationLedger,
+  listPurchasesByItemType,
+  addPurchasePayment,
 }
 
 export default purchaseService

@@ -2,24 +2,18 @@ import itemService from '@services/items.service'
 import asyncHandler from '@utils/async-handler'
 
 const create = async (req, res) => {
-  const newItemCategory = await itemService.create(req.body, req.user)
-  res.success(newItemCategory, {
-    message: 'Item category created',
-    statusCode: 201,
-  })
+  const newItemCategory = await itemService.createItem(req.body, req.user)
+  res.success(newItemCategory, { message: 'Item category created', statusCode: 201 })
 }
 
 const getNames = async (req, res) => {
-  const records = await itemService.getNames(req.user)
+  const records = await itemService.getItemNameOptions(req.user)
   res.success(records, { message: 'item category names' })
 }
 
 const getById = async (req, res) => {
   const { item_category_id } = req.params
-  const itemCategoryRecord = await itemService.getById(
-    item_category_id,
-    req.user
-  )
+  const itemCategoryRecord = await itemService.getItemById(item_category_id, req.user)
   res.success(itemCategoryRecord, { message: 'Item category retreived' })
 }
 
@@ -28,48 +22,30 @@ const getAll = async (req, res) => {
     page: parseInt(req.query.page) || 1,
     limit: parseInt(req.query.limit) || 10,
   }
-
-  if (req.query.master_id) {
-    filter.master_id = req.query.master_id
-  }
-
-  if (req.query.status) {
-    filter.status = req.query.status
-  }
-
-  if (req.query.name) {
-    filter.name = req.query.name
-  }
-
-  const itemCategoryRecords = await itemService.getAll(filter, req.user)
-  res.success(itemCategoryRecords, {
-    message: 'Item categories fetched successfully',
-  })
+  if (req.query.master_id) filter.master_id = req.query.master_id
+  if (req.query.status) filter.status = req.query.status
+  if (req.query.name) filter.name = req.query.name
+  const itemCategoryRecords = await itemService.listItems(filter, req.user)
+  res.success(itemCategoryRecords, { message: 'Item categories fetched successfully' })
 }
 
 const getItemsByVendorId = async (req, res) => {
   const { vendor_id } = req.params
   const payload = req.body
-
-  const records = await itemService.getItemsByVendorId(
-    vendor_id,
-    payload,
-    req.user
-  )
+  const records = await itemService.listItemsByVendor(vendor_id, payload, req.user)
   res.success(records, { message: 'Items by Vendor Id' })
 }
 
 const updateById = async (req, res) => {
   const { item_category_id } = req.params
   const payload = req.body
-
-  await itemService.updateById(item_category_id, payload, req.user)
+  await itemService.updateItem(item_category_id, payload, req.user)
   res.success(null, { message: 'Vendor updated successfully' })
 }
 
 const deleteById = async (req, res) => {
   const { item_category_id } = req.params
-  await itemService.deleteById(item_category_id, req.user)
+  await itemService.deleteItem(item_category_id, req.user)
   res.success(null, { message: 'Vendor deleted successfully', statusCode: 204 })
 }
 

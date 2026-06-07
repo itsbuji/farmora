@@ -5,7 +5,7 @@ const create = async (req, res) => {
   const payload = req.body
   const user = req.user
 
-  const newRecord = await workingCostService.create(payload, user)
+  const newRecord = await workingCostService.createWorkingCost(payload, user)
   res.success(newRecord, {
     message: 'Working cost record created successfully',
   })
@@ -25,7 +25,7 @@ const getAll = async (req, res) => {
     filter.end_date = req.query.end_date
   }
 
-  const records = await workingCostService.getAll(filter, user)
+  const records = await workingCostService.getWorkingCosts(filter, user)
   res.success(records, {
     message: 'Working cost records retrieved successfully',
   })

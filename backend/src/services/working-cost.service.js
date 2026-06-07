@@ -5,7 +5,7 @@ import userRoles from '@utils/user-roles'
 import dayjs from 'dayjs'
 import { Op } from 'sequelize'
 
-const create = async (payload, currentUser) => {
+const createWorkingCost = async (payload, currentUser) => {
   if (currentUser.user_type === userRoles.staff.type) {
     payload.master_id = currentUser.master_id
   } else {
@@ -16,7 +16,7 @@ const create = async (payload, currentUser) => {
   return record
 }
 
-const getAll = async (filter, currentUser) => {
+const getWorkingCosts = async (filter, currentUser) => {
   const { season_id, start_date, end_date } = filter
   const whereClause = {}
 
@@ -59,7 +59,7 @@ const getAll = async (filter, currentUser) => {
     filter.category_id = item.id
   }
 
-  const rawWorkingCost = await purchaseService.getAll(filter, currentUser)
+  const rawWorkingCost = await purchaseService.listPurchases(filter, currentUser)
 
   const parsedWorkingCost = rawWorkingCost.data.map((item) => {
     return {
@@ -120,8 +120,8 @@ const getAll = async (filter, currentUser) => {
 }
 
 const workingCostService = {
-  create,
-  getAll,
+  createWorkingCost,
+  getWorkingCosts,
 }
 
 export default workingCostService

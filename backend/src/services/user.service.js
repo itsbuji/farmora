@@ -36,7 +36,7 @@ const createStaff = async (payload, currentUser) => {
     // )
 
     // console.log('Assigned Roles:', newRoles)
-    // await subscriptionService.create(newUser.id, payload.package_id, transaction);
+    // await subscriptionService.createSubscription(newUser.id, payload.package_id, transaction);
 
     // sendMail(
     // 	insertData.username,
@@ -58,7 +58,7 @@ const createStaff = async (payload, currentUser) => {
   }
 }
 
-const getById = async (userId, currentUser) => {
+const getUserById = async (userId, currentUser) => {
   const { user_type, id } = currentUser || {}
   const filter = { id: userId }
 
@@ -86,17 +86,17 @@ const getUserByUsername = async (username) => {
   return userRecord
 }
 
-const update = async (userId, payload, currentUser) => {
-  const userRecord = await userService.getById(userId, currentUser)
+const updateUser = async (userId, payload, currentUser) => {
+  const userRecord = await userService.getUserById(userId, currentUser)
   await userRecord.update(payload)
 }
 
-const deleteById = async (userId, currentUser) => {
-  const userRecord = await userService.getById(userId, currentUser)
+const deleteUser = async (userId, currentUser) => {
+  const userRecord = await userService.getUserById(userId, currentUser)
   await userRecord.destroy()
 }
 
-const getAll = async (payload = {}, currentUser) => {
+const listUsers = async (payload = {}, currentUser) => {
   const { limit, page, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -141,11 +141,11 @@ const getCompanyNameById = async (id) => {
 
 const userService = {
   createStaff,
-  getAll,
-  getById,
-  update,
-  getUserByUsername: getUserByUsername,
-  delete: deleteById,
+  listUsers,
+  getUserById,
+  updateUser,
+  getUserByUsername,
+  deleteUser,
   getCompanyNameById,
 }
 

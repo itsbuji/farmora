@@ -1,11 +1,11 @@
-import integrationService from '@services/itegration-book.service'
+import integrationService from '@services/integration-book.service'
 import asyncHandler from '@utils/async-handler'
 
 const create = async (req, res) => {
   const payload = req.body
   const user = req.user
 
-  const newRecord = await integrationService.create(payload, user)
+  const newRecord = await integrationService.createIntegrationBookEntry(payload, user)
   res.success(newRecord, {
     message: 'Integration book record created successfully',
   })
@@ -25,7 +25,7 @@ const getAll = async (req, res) => {
     filter.end_date = req.query.end_date
   }
 
-  const records = await integrationService.getAll(filter, user)
+  const records = await integrationService.getIntegrationBook(filter, user)
   res.success(records, {
     message: 'Integration book records retrieved successfully',
   })

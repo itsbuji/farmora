@@ -69,7 +69,7 @@ router.put(
   '/item-batch-assign',
   validate(assignItemToBatchSchema),
   isAuthenticated,
-  purchaseController.assingItemToBatch
+  purchaseController.assignItemToBatch
 )
 router.put(
   '/item-batch-reassign',

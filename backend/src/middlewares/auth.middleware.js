@@ -19,7 +19,7 @@ export const isAuthenticated = asyncHandler(async function (req, res, next) {
 
   const decoded = verify(token, CONFIG.jwt_secret)
 
-  const authenticatedUser = await userService.getById(decoded.id)
+  const authenticatedUser = await userService.getUserById(decoded.id)
 
   if (authenticatedUser) {
     req.user = authenticatedUser

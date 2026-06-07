@@ -7,14 +7,14 @@ import UserModel from '@models/user'
 import FarmModel from '@models/farm'
 import SeasonModel from '@models/season'
 
-const create = async (payload, currentUser) => {
+const createBatch = async (payload, currentUser) => {
 	payload.name = payload.name.trim()
 	payload.master_id = currentUser.id
 	const newBatch = await BatchModel.create(payload)
 	return newBatch
 }
 
-const getNames = async (currentUser, filter) => {
+const getBatchNameOptions = async (currentUser, filter) => {
 	if (currentUser.user_type === userRoles.manager.type) {
 		filter.master_id = currentUser.id
 	}
@@ -33,7 +33,7 @@ const getNames = async (currentUser, filter) => {
 	return records
 }
 
-const getAll = async (payload, currentUser) => {
+const listBatches = async (payload, currentUser) => {
 	const { page, limit, ...filter } = payload
 	const offset = (page - 1) * limit
 
@@ -63,12 +63,12 @@ const getAll = async (payload, currentUser) => {
 			data: rows,
 		}
 	} catch (error) {
-		console.error('Error in getAll:', error)
+		console.error('Error in listBatches:', error)
 		throw error
 	}
 }
 
-const getById = async (batchId, currentUser, opts = {}) => {
+const getBatchById = async (batchId, currentUser, opts = {}) => {
 	const { include = [], where } = opts
 	let filter = { id: batchId }
 	if (where) {
@@ -93,7 +93,7 @@ const getById = async (batchId, currentUser, opts = {}) => {
 	return batchRecord
 }
 
-const getBySeasonId = async (seasonId, currentUser) => {
+const getBatchesBySeasonId = async (seasonId, currentUser) => {
 	let filter = {
 		season_id: seasonId,
 		closed_on: {
@@ -118,29 +118,29 @@ const getBySeasonId = async (seasonId, currentUser) => {
 	return batchRecord
 }
 
-const updateById = async (batchId, payload, currentUser) => {
-	const batchRecord = await getById(batchId, currentUser)
+const updateBatch = async (batchId, payload, currentUser) => {
+	const batchRecord = await getBatchById(batchId, currentUser)
 	await batchRecord.update(payload)
 }
 
-const close = async (batchId, currentUser) => {
-	await updateById(batchId, { closed_on: dayjs().toDate() }, currentUser)
+const closeBatch = async (batchId, currentUser) => {
+	await updateBatch(batchId, { closed_on: dayjs().toDate() }, currentUser)
 }
 
-const deleteById = async (batchId, currentUser) => {
-	const batchRecord = await getById(batchId, currentUser)
+const deleteBatch = async (batchId, currentUser) => {
+	const batchRecord = await getBatchById(batchId, currentUser)
 	await batchRecord.destroy()
 }
 
 const batchService = {
-	create,
-	getAll,
-	getById,
-	getBySeasonId,
-	updateById,
-	deleteById,
-	close,
-	getNames,
+	createBatch,
+	listBatches,
+	getBatchById,
+	getBatchesBySeasonId,
+	updateBatch,
+	deleteBatch,
+	closeBatch,
+	getBatchNameOptions,
 }
 
 export default batchService

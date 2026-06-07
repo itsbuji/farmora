@@ -5,7 +5,7 @@ const create = async (req, res) => {
   const payload = req.body
   const user = req.user
 
-  const newRecord = await expenseSalesService.create(payload, user)
+  const newRecord = await expenseSalesService.createExpenseSale(payload, user)
   res.success(newRecord, {
     message: 'Expense sales record created successfully',
   })
@@ -30,7 +30,7 @@ const getAll = async (req, res) => {
     filter.end_date = req.query.end_date
   }
 
-  const records = await expenseSalesService.getAll(filter, user)
+  const records = await expenseSalesService.listExpenseSales(filter, user)
   res.success(records, {
     message: 'Expense sales records retrieved successfully',
   })
@@ -40,7 +40,7 @@ const getById = async (req, res) => {
   const { id } = req.params
   const user = req.user
 
-  const record = await expenseSalesService.getById(id, user)
+  const record = await expenseSalesService.getExpenseSaleById(id, user)
   res.success(record, {
     message: 'Expense sales record retrieved successfully',
   })
@@ -51,7 +51,7 @@ const updateById = async (req, res) => {
   const payload = req.body
   const user = req.user
 
-  await expenseSalesService.updateById(id, payload, user)
+  await expenseSalesService.updateExpenseSale(id, payload, user)
   res.success(null, {
     message: 'Expense sales record updated successfully',
   })
@@ -61,7 +61,7 @@ const deleteById = async (req, res) => {
   const { id } = req.params
   const user = req.user
 
-  await expenseSalesService.deleteById(id, user)
+  await expenseSalesService.deleteExpenseSale(id, user)
   res.success(null, {
     message: 'Expense sales record deleted successfully',
     statusCode: 204,

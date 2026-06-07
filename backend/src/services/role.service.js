@@ -7,7 +7,7 @@ import RolePermissionModel from '@models/rolepermission'
 import userRoles from '@utils/user-roles'
 import PermissionModel from '@models/permission'
 
-const createRoleService = async (payload, currentUser) => {
+const createRole = async (payload, currentUser) => {
   console.log('Creating role with payload:', payload, 'for user:', currentUser)
   if (currentUser.user_type === userRoles.staff.type) {
     throw new PermissionDeniedError('Only managers and admins can create roles')
@@ -48,7 +48,7 @@ const createRoleService = async (payload, currentUser) => {
   }
 }
 
-const getAllRolesService = async (payload, currentUser) => {
+const listRoles = async (payload, currentUser) => {
   const { limit, page, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -85,7 +85,7 @@ const getAllRolesService = async (payload, currentUser) => {
   }
 }
 
-const getRoleByIdService = async (roleId, currentUser) => {
+const getRoleById = async (roleId, currentUser) => {
   const { user_type, id } = currentUser || {}
   const filter = { id: roleId }
 
@@ -127,8 +127,8 @@ const getRoleByIdService = async (roleId, currentUser) => {
   return roleRecord
 }
 
-const updateRoleByIdService = async (roleId, payload, currentUser) => {
-  const roleRecord = await getRoleByIdService(roleId, currentUser)
+const updateRole = async (roleId, payload, currentUser) => {
+  const roleRecord = await getRoleById(roleId, currentUser)
   const transaction = await sequelize.transaction()
   try {
     await roleRecord.update(payload, { transaction })
@@ -153,8 +153,8 @@ const updateRoleByIdService = async (roleId, payload, currentUser) => {
   }
 }
 
-const deleteRoleByIdService = async (roleId, currentUser) => {
-  const roleRecord = await getRoleByIdService(roleId, currentUser)
+const deleteRole = async (roleId, currentUser) => {
+  const roleRecord = await getRoleById(roleId, currentUser)
   RolePermissionModel.destroy({
     where: { role_id: roleId },
   })
@@ -162,11 +162,11 @@ const deleteRoleByIdService = async (roleId, currentUser) => {
 }
 
 const roleService = {
-  createRoleService,
-  getAllRolesService,
-  getRoleByIdService,
-  updateRoleByIdService,
-  deleteRoleByIdService,
+  createRole,
+  listRoles,
+  getRoleById,
+  updateRole,
+  deleteRole,
 }
 
 export default roleService

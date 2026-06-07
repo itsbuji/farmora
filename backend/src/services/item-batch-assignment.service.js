@@ -2,7 +2,7 @@ import { ItemAssignmentNotFoundError } from '@errors/item.errors'
 import ItemBatchAssignmentModel from '@models/itembatchassignment'
 import logger from '@utils/logger'
 
-const create = async (payload) => {
+const createItemBatchAssignment = async (payload) => {
   logger.debug({ payload }, 'Assigning item to batch: raw input')
   const newRecord = await ItemBatchAssignmentModel.create(payload)
   logger.debug({ item: newRecord }, 'Assigned item to batch: raw response')
@@ -18,7 +18,7 @@ const create = async (payload) => {
   return newRecord
 }
 
-const getOneByBatchAndItemId = async (batchId, itemId) => {
+const getAssignmentByBatchAndItem = async (batchId, itemId) => {
   logger.debug({ batchId, itemId }, 'Getting assignment by batch and item')
   const record = await ItemBatchAssignmentModel.findOne({
     where: {
@@ -35,10 +35,10 @@ const getOneByBatchAndItemId = async (batchId, itemId) => {
   return record
 }
 
-const updateByBatchIdAndItemId = async (payload) => {
+const updateItemBatchAssignment = async (payload) => {
   const { item_id, batch_id, quantity } = payload
   logger.debug({ payload }, 'Updating assignment quantity')
-  const record = await getOneByBatchAndItemId(batch_id, item_id)
+  const record = await getAssignmentByBatchAndItem(batch_id, item_id)
   if (!record) {
     throw new ItemAssignmentNotFoundError(batch_id, item_id)
   }
@@ -51,9 +51,9 @@ const updateByBatchIdAndItemId = async (payload) => {
 }
 
 const itemBatchAssignmentService = {
-  create,
-  getOneByBatchAndItemId,
-  updateByBatchIdAndItemId,
+  createItemBatchAssignment,
+  getAssignmentByBatchAndItem,
+  updateItemBatchAssignment,
 }
 
 export default itemBatchAssignmentService

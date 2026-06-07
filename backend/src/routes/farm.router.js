@@ -34,7 +34,7 @@ router.delete(
   '/:farm_id',
   isAuthenticated,
   isManagerOrAdmin,
-  farmController.deletById
+  farmController.deleteById
 )
 
 export default router

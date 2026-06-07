@@ -7,7 +7,7 @@ import { Op } from 'sequelize'
 import logger from '@utils/logger'
 import itemService from '@services/items.service'
 
-const create = async (payload, currentUser) => {
+const createItemReturn = async (payload, currentUser) => {
   logger.debug({ payload, currentUser }, 'Creating item return: raw input')
 
   if (currentUser.user_type === userRoles.staff.type) {
@@ -36,9 +36,9 @@ const create = async (payload, currentUser) => {
   logger.info({ item_return: payload }, 'Creating item return')
   const newItemReturn = await ItemReturnModel.create(payload)
   logger.info({ item_return_id: newItemReturn.id }, 'Item return created')
-  const item = await itemService.getById(payload.item_category_id, currentUser)
+  const item = await itemService.getItemById(payload.item_category_id, currentUser)
 
-  itemService.updateById(
+  itemService.updateItem(
     item.id,
     { quantity: item.quantity - payload.quantity },
     currentUser
@@ -47,7 +47,7 @@ const create = async (payload, currentUser) => {
   return newItemReturn
 }
 
-const getAll = async (payload, currentUser) => {
+const listItemReturns = async (payload, currentUser) => {
   const { page, limit, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -127,7 +127,7 @@ const getAll = async (payload, currentUser) => {
   }
 }
 
-const getById = async (itemReturnId, currentUser) => {
+const getItemReturnById = async (itemReturnId, currentUser) => {
   const filter = { id: itemReturnId }
 
   if (currentUser.user_type === userRoles.staff.type) {
@@ -181,7 +181,7 @@ const getById = async (itemReturnId, currentUser) => {
   return itemReturnRecord
 }
 
-const updateById = async (id, payload, currentUser) => {
+const updateItemReturn = async (id, payload, currentUser) => {
   logger.debug(
     { item_return_id: id, updated_data: payload, actor_id: currentUser.id },
     'Updating item return: raw payload'
@@ -195,17 +195,17 @@ const updateById = async (id, payload, currentUser) => {
     },
     'Updating item return'
   )
-  const itemReturnRecord = await getById(id, currentUser)
+  const itemReturnRecord = await getItemReturnById(id, currentUser)
   await itemReturnRecord.update(payload)
   logger.info({ item_return_id: itemReturnRecord.id }, 'Item return updated')
 }
 
-const deleteById = async (id, currentUser) => {
+const deleteItemReturn = async (id, currentUser) => {
   logger.debug(
     { item_return_id: id, actor_id: currentUser.id },
     'Deleting item return: resolving record'
   )
-  const itemReturnRecord = await getById(id, currentUser)
+  const itemReturnRecord = await getItemReturnById(id, currentUser)
   await itemReturnRecord.destroy()
   logger.info(
     { item_return_id: id, actor_id: currentUser.id },
@@ -214,11 +214,11 @@ const deleteById = async (id, currentUser) => {
 }
 
 const itemReturnService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
+  createItemReturn,
+  listItemReturns,
+  getItemReturnById,
+  updateItemReturn,
+  deleteItemReturn,
 }
 
 export default itemReturnService

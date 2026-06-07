@@ -31,7 +31,7 @@ const getBatchOverview = async (filter, currentUser) => {
     userWhereClause.master_id = currentUser.id
   }
 
-  const batch = await batchService.getById(batch_id, currentUser, {
+  const batch = await batchService.getBatchById(batch_id, currentUser, {
     include: [{ model: SeasonModel, as: 'season', required: false }],
   })
 
@@ -246,8 +246,8 @@ const getSeasonOverview = async (filter, currentUser) => {
     userWhereClause.master_id = currentUser.id
   }
 
-  const season = await seasonService.getById(season_id, currentUser)
-  const batches = await batchService.getBySeasonId(season_id, currentUser)
+  const season = await seasonService.getSeasonById(season_id, currentUser)
+  const batches = await batchService.getBatchesBySeasonId(season_id, currentUser)
 
   const batchOverviews = await Promise.all(
     batches.map((b) => {

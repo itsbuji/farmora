@@ -6,7 +6,7 @@ const create = async (req, res) => {
   const payload = req.body
 
   logger.info({ payload }, 'Create item return request received')
-  const newItemReturn = await purchaseReturnService.create(payload, req.user)
+  const newItemReturn = await purchaseReturnService.createPurchaseReturn(payload, req.user)
 
   res.success(newItemReturn, {
     message: 'Item return created successfully',
@@ -45,7 +45,7 @@ const getAll = async (req, res) => {
     filter.end_date = req.query.end_date
   }
 
-  const itemReturnRecords = await purchaseReturnService.getAll(filter, req.user)
+  const itemReturnRecords = await purchaseReturnService.listPurchaseReturns(filter, req.user)
   res.success(itemReturnRecords, {
     message: 'Item returns fetched successfully',
   })
@@ -53,7 +53,7 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   const { item_return_id } = req.params
-  const itemReturnRecord = await purchaseReturnService.getById(
+  const itemReturnRecord = await purchaseReturnService.getPurchaseReturnById(
     item_return_id,
     req.user
   )
@@ -69,13 +69,13 @@ const updateById = async (req, res) => {
     { payload, actor_id: req.user.id },
     'Update item return request received'
   )
-  await purchaseReturnService.updateById(item_return_id, payload, req.user)
+  await purchaseReturnService.updatePurchaseReturn(item_return_id, payload, req.user)
   res.success(null, { message: 'Item return updated successfully' })
 }
 
 const deleteById = async (req, res) => {
   const { item_return_id } = req.params
-  await purchaseReturnService.deleteById(item_return_id, req.user)
+  await purchaseReturnService.deletePurchaseReturn(item_return_id, req.user)
   res.success(null, {
     message: 'Item return deleted successfully',
     statusCode: 204,

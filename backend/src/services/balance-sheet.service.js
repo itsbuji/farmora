@@ -19,7 +19,7 @@ const getMasterId = (currentUser) => {
   return currentUser.id
 }
 
-const buildDateFilter = (startDate, endDate, dateField = 'date') => {
+function buildDateFilter(startDate, endDate, dateField = 'date') {
   const filter = {}
 
   if (startDate && endDate) {
@@ -96,35 +96,35 @@ const fetchPurchaseReturns = async (masterId, startDate, endDate) => {
   })
 }
 
-const fetchWorkingCosts = async (masterId, startDate, endDate) => {
+async function fetchWorkingCosts(masterId, startDate, endDate) {
   const dateFilter = buildDateFilter(startDate, endDate)
   return WorkingCostModel.findAll({
     where: { master_id: masterId, ...dateFilter },
   })
 }
 
-const fetchGeneralExpenses = async (masterId, startDate, endDate) => {
+async function fetchGeneralExpenses(masterId, startDate, endDate) {
   const dateFilter = buildDateFilter(startDate, endDate)
   return GeneralExpenseModel.findAll({
     where: { master_id: masterId, ...dateFilter },
   })
 }
 
-const fetchExpenseSales = async (masterId, startDate, endDate) => {
+async function fetchExpenseSales(masterId, startDate, endDate) {
   const dateFilter = buildDateFilter(startDate, endDate)
   return ExpenseSalesModel.findAll({
     where: { master_id: masterId, ...dateFilter },
   })
 }
 
-const fetchIntegrationBooks = async (masterId, startDate, endDate) => {
+async function fetchIntegrationBooks(masterId, startDate, endDate) {
   const dateFilter = buildDateFilter(startDate, endDate)
   return IntegrationBookModel.findAll({
     where: { master_id: masterId, ...dateFilter },
   })
 }
 
-const fetchPurchaseBooks = async (masterId, startDate, endDate) => {
+async function fetchPurchaseBooks(masterId, startDate, endDate) {
   const dateFilter = buildDateFilter(startDate, endDate)
   return PurchaseBookModel.findAll({
     where: { master_id: masterId, ...dateFilter },
@@ -132,7 +132,7 @@ const fetchPurchaseBooks = async (masterId, startDate, endDate) => {
   })
 }
 
-const fetchAllRecords = async (masterId, startDate, endDate) => {
+async function fetchAllRecords(masterId, startDate, endDate) {
   const [
     openingBalance,
     sales,
@@ -173,7 +173,7 @@ const fetchAllRecords = async (masterId, startDate, endDate) => {
 //            type, amount, category} transaction objects
 // ---------------------------------------------------------------------------
 
-const saleToTransactions = (records) => {
+function saleToTransactions(records) {
   const txns = []
   for (const r of records) {
     const buyerName = r.buyer ? r.buyer.name : 'Unknown'

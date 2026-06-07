@@ -25,7 +25,7 @@ const getAllUsers = async (req, res) => {
     filter.parent_id = parent_id
   }
 
-  const result = await userService.getAll(filter, req.user)
+  const result = await userService.listUsers(filter, req.user)
 
   res.success(result, { message: 'users list' })
 }
@@ -33,19 +33,19 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   const { user_id } = req.params
 
-  const userRecord = await userService.getById(user_id, req.user)
+  const userRecord = await userService.getUserById(user_id, req.user)
   res.success(userRecord, { message: 'users record' })
 }
 
 const updateUserById = async (req, res) => {
   const { user_id } = req.params
-  await userService.update(user_id, req.body, req.user)
+  await userService.updateUser(user_id, req.body, req.user)
   res.success(null, { message: 'user updated' })
 }
 
 const deleteUserById = async (req, res) => {
   const { user_id } = req.params
-  await userService.delete(user_id, req.user)
+  await userService.deleteUser(user_id, req.user)
   res.success(null, { message: 'user deleted' })
 }
 

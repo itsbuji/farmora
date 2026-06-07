@@ -3,7 +3,7 @@ import asyncHandler from '@utils/async-handler'
 
 const create = async (req, res) => {
   const payload = req.body
-  const newPackage = await packageService.create(payload)
+  const newPackage = await packageService.createPackage(payload)
   res.success(newPackage, { message: 'package created' })
 }
 
@@ -20,26 +20,26 @@ const getAll = async (req, res) => {
     filter.name = req.query.name
   }
 
-  const packageRecords = await packageService.getAll(filter)
+  const packageRecords = await packageService.listPackages(filter)
   res.success(packageRecords, { message: 'packages list' })
 }
 
 const getById = async (req, res) => {
   const { package_id } = req.params
-  const packageRecord = await packageService.getById(package_id)
+  const packageRecord = await packageService.getPackageById(package_id)
   res.success(packageRecord, { message: 'package details' })
 }
 
 const update = async (req, res) => {
   const { package_id } = req.params
   const packageData = req.body
-  await packageService.updateById(package_id, packageData)
+  await packageService.updatePackage(package_id, packageData)
   res.success(null, { message: 'package updated' })
 }
 
 const deleteById = async (req, res) => {
   const { package_id } = req.params
-  await packageService.deleteById(package_id)
+  await packageService.deletePackage(package_id)
   res.success(null, { message: 'package deleted' })
 }
 

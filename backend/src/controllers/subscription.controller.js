@@ -7,7 +7,7 @@ const create = async (req, res) => {
   const userID = req.user.id
 
   logger.info({ package_id, userID }, 'Create subscription request received')
-  const newSubscription = await subscriptionService.create(userID, package_id)
+  const newSubscription = await subscriptionService.createSubscription(userID, package_id)
 
   res.success(newSubscription, {
     message: 'Subscription created successfully',
@@ -21,7 +21,7 @@ const getAll = async (req, res) => {
     limit: parseInt(req.query.limit) || 10,
   }
 
-  const subscriptionRecords = await subscriptionService.getAll(filter)
+  const subscriptionRecords = await subscriptionService.listSubscriptions(filter)
   res.success(subscriptionRecords, {
     message: 'Subscriptions fetched successfully',
   })

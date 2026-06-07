@@ -4,7 +4,7 @@ import { v4 as UUIDV4 } from 'uuid'
 
 const paymentService = {}
 
-paymentService.process = async (
+paymentService.processPayment = async (
   userId,
   subscriptionId,
   paymentMethod = 'card',

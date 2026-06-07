@@ -10,7 +10,7 @@ const createRole = async (req, res) => {
     description,
     permission_ids,
   }
-  const newRole = await roleService.createRoleService(payload, req.user)
+  const newRole = await roleService.createRole(payload, req.user)
   res.success(newRole, { message: 'Role created', statusCode: 201 })
 }
 
@@ -32,25 +32,25 @@ const getAllRoles = async (req, res) => {
     filter.manager_id = req.user.id
   }
 
-  const roleRecords = await roleService.getAllRolesService(filter, req.user)
+  const roleRecords = await roleService.listRoles(filter, req.user)
   res.success(roleRecords, { message: 'Roles fetched successfully' })
 }
 
 const getRoleById = async (req, res) => {
   const { role_id } = req.params
-  const roleRecord = await roleService.getRoleByIdService(role_id, req.user)
+  const roleRecord = await roleService.getRoleById(role_id, req.user)
   res.success(roleRecord, { message: 'Role record' })
 }
 
 const updateRoleById = async (req, res) => {
   const { role_id } = req.params
-  await roleService.updateRoleByIdService(role_id, req.body, req.user)
+  await roleService.updateRole(role_id, req.body, req.user)
   res.success(null, { message: 'Role updated' })
 }
 
 const deleteRoleById = async (req, res) => {
   const { role_id } = req.params
-  await roleService.deleteRoleByIdService(role_id, req.user)
+  await roleService.deleteRole(role_id, req.user)
   res.success(null, { message: 'Role deleted' })
 }
 

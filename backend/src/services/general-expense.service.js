@@ -4,7 +4,7 @@ import userRoles from '@utils/user-roles'
 import dayjs from 'dayjs'
 import { Op } from 'sequelize'
 
-const create = async (payload, currentUser) => {
+const createGeneralExpense = async (payload, currentUser) => {
   if (currentUser.user_type === userRoles.staff.type) {
     payload.master_id = currentUser.master_id
   } else {
@@ -15,7 +15,7 @@ const create = async (payload, currentUser) => {
   return record
 }
 
-const getAll = async (filter, currentUser) => {
+const listGeneralExpenses = async (filter, currentUser) => {
   const { season_id, start_date, end_date, purpose } = filter
   const whereClause = {}
 
@@ -53,7 +53,7 @@ const getAll = async (filter, currentUser) => {
   return generalExpenses
 }
 
-const getById = async (id, currentUser) => {
+const getGeneralExpenseById = async (id, currentUser) => {
   const whereClause = { id }
 
   if (currentUser.user_type === userRoles.staff.type) {
@@ -73,22 +73,22 @@ const getById = async (id, currentUser) => {
   return record
 }
 
-const updateById = async (id, payload, currentUser) => {
-  const record = await getById(id, currentUser)
+const updateGeneralExpense = async (id, payload, currentUser) => {
+  const record = await getGeneralExpenseById(id, currentUser)
   await record.update(payload)
 }
 
-const deleteById = async (id, currentUser) => {
-  const record = await getById(id, currentUser)
+const deleteGeneralExpense = async (id, currentUser) => {
+  const record = await getGeneralExpenseById(id, currentUser)
   await record.destroy()
 }
 
 const generalExpenseService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
+  createGeneralExpense,
+  listGeneralExpenses,
+  getGeneralExpenseById,
+  updateGeneralExpense,
+  deleteGeneralExpense,
 }
 
 export default generalExpenseService

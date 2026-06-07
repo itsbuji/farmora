@@ -5,7 +5,7 @@ import userRoles from '@utils/user-roles'
 import { Op } from 'sequelize'
 import FarmModel from '@models/farm'
 
-const create = async (payload, currentUser) => {
+const createIntegrationBookEntry = async (payload, currentUser) => {
   if (currentUser.user_type === userRoles.staff.type) {
     payload.master_id = currentUser.master_id
   } else {
@@ -16,7 +16,7 @@ const create = async (payload, currentUser) => {
   return record
 }
 
-const getAll = async (filter, currentUser) => {
+const getIntegrationBook = async (filter, currentUser) => {
   const { farm_id, start_date, end_date } = filter
 
   const whereClause = {}
@@ -48,7 +48,7 @@ const getAll = async (filter, currentUser) => {
     filter.category_id = item.id
   }
 
-  const rawPurchases = await purchaseService.getAll(filter, currentUser)
+  const rawPurchases = await purchaseService.listPurchases(filter, currentUser)
 
   const purchases = rawPurchases.data.map((purchase) => purchase.toJSON())
   const credit = purchases
@@ -106,8 +106,8 @@ const getAll = async (filter, currentUser) => {
 }
 
 const integrationService = {
-  create,
-  getAll,
+  createIntegrationBookEntry,
+  getIntegrationBook,
 }
 
 export default integrationService

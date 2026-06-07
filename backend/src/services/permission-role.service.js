@@ -1,6 +1,6 @@
 import PermissionModel from '@models/permission'
 
-const getAllPermissionRoles = async () => {
+const listPermissionRoles = async () => {
   try {
     const permissionRecords = await PermissionModel.findAll({})
     return permissionRecords
@@ -11,7 +11,7 @@ const getAllPermissionRoles = async () => {
 }
 
 const permissionRoleService = {
-  getAllPermissionRoles,
+  listPermissionRoles,
 }
 
 export default permissionRoleService

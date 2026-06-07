@@ -4,7 +4,7 @@ import UserModel from '@models/user'
 import userRoles from '@utils/user-roles'
 import { Op } from 'sequelize'
 
-const create = async (payload, currentUser) => {
+const createFarm = async (payload, currentUser) => {
   payload.master_id = currentUser.id
   payload.own = true
   payload.status = 'active'
@@ -12,7 +12,7 @@ const create = async (payload, currentUser) => {
   return newFarm
 }
 
-const getNames = async (currentUser) => {
+const getFarmNameOptions = async (currentUser) => {
   const filter = {}
   if (currentUser.user_type === userRoles.manager.type) {
     filter.master_id = currentUser.id
@@ -26,7 +26,7 @@ const getNames = async (currentUser) => {
   return records
 }
 
-const getAll = async (payload = {}, currentUser) => {
+const listFarms = async (payload = {}, currentUser) => {
   const { page, limit, ...filter } = payload
   // const offset = (page - 1) * limit
 
@@ -51,7 +51,7 @@ const getAll = async (payload = {}, currentUser) => {
   }
 }
 
-const getById = async (farmId, currentUser) => {
+const getFarmById = async (farmId, currentUser) => {
   const filter = { id: farmId }
   if (currentUser.user_type === userRoles.manager.type) {
     filter.master_id = currentUser.id
@@ -65,23 +65,23 @@ const getById = async (farmId, currentUser) => {
   return farmRecord
 }
 
-const updateById = async (farmId, payload, currentUser) => {
-  const farmRecord = await getById(farmId, currentUser)
+const updateFarm = async (farmId, payload, currentUser) => {
+  const farmRecord = await getFarmById(farmId, currentUser)
   await farmRecord.update(payload)
 }
 
-const deleteById = async (farmId, currentUser) => {
-  const farmRecord = await getById(farmId, currentUser)
+const deleteFarm = async (farmId, currentUser) => {
+  const farmRecord = await getFarmById(farmId, currentUser)
   await farmRecord.destroy()
 }
 
 const farmService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
-  getNames,
+  createFarm,
+  listFarms,
+  getFarmById,
+  updateFarm,
+  deleteFarm,
+  getFarmNameOptions,
 }
 
 export default farmService

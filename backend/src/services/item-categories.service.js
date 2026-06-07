@@ -3,7 +3,7 @@ import ItemCategoryModel from '@models/item_categories.models'
 import userRoles from '@utils/user-roles'
 import { Op } from 'sequelize'
 
-const create = async (payload, currentUser) => {
+const createItemCategory = async (payload, currentUser) => {
   payload.status = 'active'
   if (currentUser.user_type === userRoles.staff.type) {
     payload.master_id = currentUser.master_id
@@ -15,7 +15,7 @@ const create = async (payload, currentUser) => {
   return newItemCategory
 }
 
-const getNames = async (currentUser) => {
+const getItemCategoryNameOptions = async (currentUser) => {
   const filter = {}
   if (currentUser.user_type === userRoles.manager.type) {
     filter.master_id = currentUser.id
@@ -29,7 +29,7 @@ const getNames = async (currentUser) => {
   return records
 }
 
-const getAll = async (payload, currentUser) => {
+const listItemCategories = async (payload, currentUser) => {
   const { limit, page, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -58,7 +58,7 @@ const getAll = async (payload, currentUser) => {
   }
 }
 
-const getById = async (itemCategoryId, currentUser) => {
+const getItemCategoryById = async (itemCategoryId, currentUser) => {
   const filter = {
     id: itemCategoryId,
   }
@@ -79,23 +79,23 @@ const getById = async (itemCategoryId, currentUser) => {
   return itemCategoryRecord
 }
 
-const updateById = async (itemCategoryId, payload, currentUser) => {
-  const itemCategoryRecord = await getById(itemCategoryId, currentUser)
+const updateItemCategory = async (itemCategoryId, payload, currentUser) => {
+  const itemCategoryRecord = await getItemCategoryById(itemCategoryId, currentUser)
   await itemCategoryRecord.update(payload)
 }
 
-const deleteById = async (itemCategoryId, currentUser) => {
-  const itemCategory = await getById(itemCategoryId, currentUser)
+const deleteItemCategory = async (itemCategoryId, currentUser) => {
+  const itemCategory = await getItemCategoryById(itemCategoryId, currentUser)
   itemCategory.destroy()
 }
 
 const itemCategoryService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
-  getNames,
+  createItemCategory,
+  listItemCategories,
+  getItemCategoryById,
+  updateItemCategory,
+  deleteItemCategory,
+  getItemCategoryNameOptions,
 }
 
 export default itemCategoryService

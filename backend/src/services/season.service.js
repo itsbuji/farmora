@@ -4,7 +4,7 @@ import userRoles from '@utils/user-roles'
 import dayjs from 'dayjs'
 import { Op } from 'sequelize'
 
-const create = async (payload, currentUser) => {
+const createSeason = async (payload, currentUser) => {
   const startDate = dayjs(payload.startDate).toDate()
   const endDate = dayjs(payload.endDate).toDate()
   payload.start_date = startDate
@@ -16,7 +16,7 @@ const create = async (payload, currentUser) => {
   return newSeason
 }
 
-const getNames = async (currentUser, filter) => {
+const getSeasonNameOptions = async (currentUser, filter) => {
   if (currentUser.user_type === userRoles.manager.type) {
     filter.master_id = currentUser.id
   }
@@ -29,7 +29,7 @@ const getNames = async (currentUser, filter) => {
   return records
 }
 
-const getAll = async (payload = {}, currentUser) => {
+const listSeasons = async (payload = {}, currentUser) => {
   const { page, limit, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -56,7 +56,7 @@ const getAll = async (payload = {}, currentUser) => {
   }
 }
 
-const getById = async (seasonId, currentUser) => {
+const getSeasonById = async (seasonId, currentUser) => {
   const filter = { id: seasonId }
   if (currentUser.user_type === userRoles.manager.type) {
     filter.master_id = currentUser.id
@@ -71,28 +71,28 @@ const getById = async (seasonId, currentUser) => {
   return seasonRecord
 }
 
-const updateById = async (seasonId, payload, currentUser) => {
-  const seasonRecord = await getById(seasonId, currentUser)
+const updateSeason = async (seasonId, payload, currentUser) => {
+  const seasonRecord = await getSeasonById(seasonId, currentUser)
   await seasonRecord.update(payload)
 }
 
-const close = async (seasonId, currentUser) => {
-  await updateById(seasonId, { closed_on: dayjs().toDate() }, currentUser)
+const closeSeason = async (seasonId, currentUser) => {
+  await updateSeason(seasonId, { closed_on: dayjs().toDate() }, currentUser)
 }
 
-const deleteById = async (packageID, currentUser) => {
-  const seasonRecord = await getById(packageID, currentUser)
+const deleteSeason = async (packageID, currentUser) => {
+  const seasonRecord = await getSeasonById(packageID, currentUser)
   await seasonRecord.destroy()
 }
 
 const seasonService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
-  getNames,
-  close,
+  createSeason,
+  listSeasons,
+  getSeasonById,
+  updateSeason,
+  deleteSeason,
+  getSeasonNameOptions,
+  closeSeason,
 }
 
 export default seasonService

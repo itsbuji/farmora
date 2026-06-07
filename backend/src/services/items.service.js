@@ -4,7 +4,7 @@ import ItemModel from '@models/items.model'
 import userRoles from '@utils/user-roles'
 import { Op } from 'sequelize'
 
-const create = async (payload, currentUser) => {
+const createItem = async (payload, currentUser) => {
   payload.status = 'active'
   if (currentUser.user_type === userRoles.staff.type) {
     payload.master_id = currentUser.master_id
@@ -16,7 +16,7 @@ const create = async (payload, currentUser) => {
   return newRecord
 }
 
-const getNames = async (currentUser) => {
+const getItemNameOptions = async (currentUser) => {
   const filter = {}
   if (currentUser.user_type === userRoles.manager.type) {
     filter.master_id = currentUser.id
@@ -30,7 +30,7 @@ const getNames = async (currentUser) => {
   return records
 }
 
-const getItemsByVendorId = async (vendorID, currentUser) => {
+const listItemsByVendor = async (vendorID, currentUser) => {
   const filter = {
     vendor_id: vendorID,
   }
@@ -50,7 +50,7 @@ const getItemsByVendorId = async (vendorID, currentUser) => {
   return record
 }
 
-const getAll = async (payload, currentUser) => {
+const listItems = async (payload, currentUser) => {
   const { limit, page, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -80,7 +80,7 @@ const getAll = async (payload, currentUser) => {
   }
 }
 
-const getById = async (itemCategoryId, currentUser) => {
+const getItemById = async (itemCategoryId, currentUser) => {
   const filter = {
     id: itemCategoryId,
   }
@@ -101,13 +101,13 @@ const getById = async (itemCategoryId, currentUser) => {
   return record
 }
 
-const updateById = async (itemCategoryId, payload, currentUser) => {
-  const itemCategoryRecord = await getById(itemCategoryId, currentUser)
+const updateItem = async (itemCategoryId, payload, currentUser) => {
+  const itemCategoryRecord = await getItemById(itemCategoryId, currentUser)
   await itemCategoryRecord.update(payload)
 }
 
-const deleteById = async (itemCategoryId, currentUser) => {
-  const itemCategory = await getById(itemCategoryId, currentUser)
+const deleteItem = async (itemCategoryId, currentUser) => {
+  const itemCategory = await getItemById(itemCategoryId, currentUser)
   itemCategory.destroy()
 }
 
@@ -148,13 +148,13 @@ const getWorkingItem = async (currentUser) => {
 }
 
 const itemService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
-  getNames,
-  getItemsByVendorId,
+  createItem,
+  listItems,
+  getItemById,
+  updateItem,
+  deleteItem,
+  getItemNameOptions,
+  listItemsByVendor,
   getIntegrationItem,
   getWorkingItem,
 }

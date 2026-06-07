@@ -7,7 +7,7 @@ import { PackageNotFoundError } from '@errors/package.errors'
 import dayjs from 'dayjs'
 import logger from '@utils/logger'
 
-const create = async (userID, packageID) => {
+const createSubscription = async (userID, packageID) => {
   const subscriptionRecord = await SubscriptionModel.findOne({
     where: { user_id: userID },
   })
@@ -34,7 +34,7 @@ const create = async (userID, packageID) => {
   })
   logger.info({ subscription_id: newSubscription.id }, 'Subscription created')
 
-  await paymentService.process(
+  await paymentService.processPayment(
     userID,
     newSubscription.id,
     'card',
@@ -44,7 +44,7 @@ const create = async (userID, packageID) => {
   return newSubscription
 }
 
-const getAll = async (payload) => {
+const listSubscriptions = async (payload) => {
   const { page, limit } = payload
   const offset = (page - 1) * limit
 
@@ -84,8 +84,8 @@ const getAll = async (payload) => {
 }
 
 const subscriptionService = {
-  create,
-  getAll,
+  createSubscription,
+  listSubscriptions,
 }
 
 export default subscriptionService

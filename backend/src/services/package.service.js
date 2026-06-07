@@ -2,11 +2,11 @@ import { Op } from 'sequelize'
 import PackageModel from '@models/package'
 import { PackageNotFoundError } from '@errors/package.errors'
 
-const create = async (insertData) => {
+const createPackage = async (insertData) => {
   return await PackageModel.create(insertData)
 }
 
-const getAll = async (payload) => {
+const listPackages = async (payload) => {
   const { limit, page, ...filter } = payload
   const offset = (page - 1) * limit
 
@@ -29,7 +29,7 @@ const getAll = async (payload) => {
   }
 }
 
-const getById = async (id) => {
+const getPackageById = async (id) => {
   const packageRecord = await PackageModel.findOne({ where: { id } })
   if (!packageRecord) {
     throw new PackageNotFoundError(id)
@@ -37,22 +37,22 @@ const getById = async (id) => {
   return packageRecord
 }
 
-const updateById = async (id, data) => {
-  const packageRecord = await getById(id)
+const updatePackage = async (id, data) => {
+  const packageRecord = await getPackageById(id)
   await packageRecord.update(data)
 }
 
-const deleteById = async (id) => {
-  const packageRecord = await packageService.getById(id)
+const deletePackage = async (id) => {
+  const packageRecord = await packageService.getPackageById(id)
   await packageRecord.destroy()
 }
 
 const packageService = {
-  create,
-  getAll,
-  getById,
-  updateById,
-  deleteById,
+  createPackage,
+  listPackages,
+  getPackageById,
+  updatePackage,
+  deletePackage,
 }
 
 export default packageService

@@ -3,7 +3,7 @@ import VendorModel from '@models/vendor'
 import userRoles from '@utils/user-roles'
 import { Op } from 'sequelize'
 
-const create = async (payload, currentUser) => {
+const createVendor = async (payload, currentUser) => {
 	payload.master_id = currentUser.id
 	payload.status = 'active'
 	const newVendor = await VendorModel.create(payload)
@@ -18,10 +18,10 @@ const createInternalVendor = async (currentUser) => {
 		opening_balance: 0,
 		status: 'active',
 	}
-	return create(newVendor, currentUser)
+	return createVendor(newVendor, currentUser)
 }
 
-const getNames = async (currentUser) => {
+const getVendorNameOptions = async (currentUser) => {
 	const filter = {
 		vendor_type: "supplier"
 	}
@@ -37,7 +37,7 @@ const getNames = async (currentUser) => {
 	return records
 }
 
-const getAll = async (payload, currentUser) => {
+const listVendors = async (payload, currentUser) => {
 	const { page, limit, ...filter } = payload
 	const offset = (page - 1) * limit
 
@@ -64,7 +64,7 @@ const getAll = async (payload, currentUser) => {
 	}
 }
 
-const getById = async (vendorId, currentUser) => {
+const getVendorById = async (vendorId, currentUser) => {
 	const filter = { id: vendorId }
 
 	if (currentUser.user_type === userRoles.manager.type) {
@@ -78,24 +78,24 @@ const getById = async (vendorId, currentUser) => {
 	return vendorRecord
 }
 
-const updateById = async (vendorId, payload, currentUser) => {
-	const vendorRecord = await getById(vendorId, currentUser)
+const updateVendor = async (vendorId, payload, currentUser) => {
+	const vendorRecord = await getVendorById(vendorId, currentUser)
 	await vendorRecord.update(payload)
 }
 
-const deleteById = async (vendorId, currentUser) => {
-	const vendorRecord = await getById(vendorId, currentUser)
+const deleteVendor = async (vendorId, currentUser) => {
+	const vendorRecord = await getVendorById(vendorId, currentUser)
 	await vendorRecord.destroy()
 }
 
 const vendorService = {
-	create,
+	createVendor,
 	createInternalVendor,
-	getAll,
-	getById,
-	updateById,
-	deleteById,
-	getNames,
+	listVendors,
+	getVendorById,
+	updateVendor,
+	deleteVendor,
+	getVendorNameOptions,
 }
 
 export default vendorService

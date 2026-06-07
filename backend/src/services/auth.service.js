@@ -40,7 +40,7 @@ const createManager = async (payload) => {
       { transaction }
     )
 
-    await subscriptionService.create(
+    await subscriptionService.createSubscription(
       newUser.id,
       payload.package_id,
       transaction
@@ -48,7 +48,7 @@ const createManager = async (payload) => {
 
     const newVendor = await vendorService.createInternalVendor(newUser)
 
-    await itemService.create(
+    await itemService.createItem(
       {
         name: 'Integration Cost',
         vendor_id: newVendor.id,
@@ -57,7 +57,7 @@ const createManager = async (payload) => {
       newUser
     )
 
-    await itemService.create(
+    await itemService.createItem(
       {
         name: 'Working Cost',
         vendor_id: newVendor.id,
