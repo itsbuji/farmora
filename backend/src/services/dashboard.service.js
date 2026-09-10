@@ -33,14 +33,14 @@ function calculateTotalStockValue(purchaseItems, returnedItems) {
   let totalReturnedChicks = 0
 
   for (const p of purchaseItems) {
-    if (p.category.type === 'chick') {
+    if (p?.category?.type === 'chick') {
       totalPurchasedChicks += p.quantity
     }
     expenseTotal += parseFloat(p.net_amount)
   }
 
   for (const p of returnedItems) {
-    if (p.category.type === 'chick') {
+    if (p?.category?.type === 'chick') {
       totalReturnedChicks += p.quantity
     }
     returnedTotal += parseFloat(p.total_amount)
